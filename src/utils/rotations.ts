@@ -11,7 +11,7 @@ export type IRotation = IRight | ILeft;
 export type Rotator = (direction: IDirection) => IDirection;
 
 export const rotate: (rotation: IRotation) => Rotator = (rotation) => (direction) => {
-    return Directions[(direction.id + rotation.value) + 4 % 4];
+    return Directions[((direction.id + rotation.value) + 4) % 4];
 };
 
 export const rotateLeft = rotate(Left);

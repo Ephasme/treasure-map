@@ -1,21 +1,19 @@
 import { moveNorth, Mover } from "./utils/moves";
 import { IVector, add, equals } from "./utils/vector";
 import { Map, Set, List } from "immutable";
-import { IRotation, Rotator } from "./utils/rotations";
+import { IRotation, Rotator, rotateLeft } from "./utils/rotations";
 import { IDirection, North } from "./utils/directions";
 import { taggedTemplateExpression } from "@babel/types";
 
 type Id = number;
 
 interface IGameObject {
-    readonly id: Id;
     readonly location: IVector;
     readonly traversable: boolean;
 }
 
 interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
-    readonly priority: number;
     readonly orientation: IDirection;
     readonly name: string;
 }
@@ -37,6 +35,7 @@ type Dimensions = IVector;
 
 interface IGameState {
     readonly mapSize: Dimensions;
+    readonly adventurersOrder: ReadonlyArray<Id>;
     readonly objects: Map<Id, AnyObject>;
 }
 
@@ -62,17 +61,25 @@ const isLocationValid = (state: IGameState, location: IVector): boolean => {
            location.y >= 0 && location.y < state.mapSize.y;
 };
 
+const findAdventurer = (state: IGameState, id: Id): IAdventurer => {
+    const adventurer = state.objects.get(id);
+    if (!adventurer || adventurer.type !== "Adventurer") {
+        throw new Error("Not found.");
+    }
+    return adventurer;
+};
+
 type MOVE_COMMAND_TYPE = "MOVE";
 type ROTATE_COMMAND_TYPE = "ROTATE";
 
 interface IMoveCommand {
     readonly type: MOVE_COMMAND_TYPE;
-    readonly adventurer: IAdventurer;
+    readonly adventurerId: Id;
 }
 
 interface IRotateCommand {
     readonly type: ROTATE_COMMAND_TYPE;
-    readonly adventurer: IAdventurer;
+    readonly adventurerId: Id;
     readonly rotator: Rotator;
 }
 
@@ -82,10 +89,12 @@ type RotateCommandHandler = CommandHandler<IRotateCommand>;
 type MoveCommandHandler = CommandHandler<IMoveCommand>;
 
 const moveCommandHandler: MoveCommandHandler = (state, command) => {
+    const adventurer = findAdventurer(state, command.adventurerId);
+
     const {
-        adventurer,
-        adventurer: { location, orientation },
-    } = command;
+        location,
+        orientation,
+    } = adventurer;
 
     const newAdventurer: IAdventurer = {
         ...adventurer,
@@ -102,39 +111,55 @@ const moveCommandHandler: MoveCommandHandler = (state, command) => {
 
     return {
         ...state,
-        objects: state.objects.set(adventurer.id, newAdventurer),
+        objects: state.objects.set(command.adventurerId, newAdventurer),
     };
 };
 
 const rotateCommandHandler: RotateCommandHandler = (state, command) => {
     const {
-        adventurer,
-        adventurer: { id, orientation },
         rotator,
     } = command;
-    const newAdventurer: IAdventurer = { ...adventurer, orientation: rotator(orientation) };
+    const adventurer = findAdventurer(state, command.adventurerId);
+    const newAdventurer: IAdventurer = { ...adventurer, orientation: rotator(adventurer.orientation) };
     return {
         ...state,
-        objects: state.objects.set(id, newAdventurer),
+        objects: state.objects.set(command.adventurerId, newAdventurer),
     };
 };
 
 const adv1: IAdventurer = {
-    id: 1, location: { x: 1, y: 2 }, traversable: false,
-    type: "Adventurer", orientation: North, name: "bla", priority: 1 };
+    location: { x: 1, y: 2 }, traversable: false,
+    type: "Adventurer", orientation: North, name: "bla" };
 
-const initialState: IGameState = {
-    mapSize: {x: 4, y: 4},
+const initialState: (mapSize: IVector) => IGameState = (mapSize) => ({
+    mapSize,
+    adventurersOrder: [],
     objects: Map<Id, AnyObject>([
-        [adv1.id, adv1],
+        [0, adv1],
     ]),
-};
+});
 
 const commandTest: IMoveCommand = {
-    adventurer: adv1,
+    adventurerId: 0,
     type: "MOVE",
 };
 
-const newState = moveCommandHandler(initialState, commandTest);
+function serializeState(state: IGameState): string {
+    return JSON.stringify({ ...state, objects: state.objects.toObject() }, null, 4);
+}
 
-console.log(JSON.stringify({ ...newState, objects: newState.objects.toObject() }, null, 4));
+let myState = initialState({x: 4, y: 4 });
+
+console.log(serializeState(myState));
+
+myState = moveCommandHandler(myState, commandTest);
+
+console.log(serializeState(myState));
+
+myState = rotateCommandHandler(myState, {
+    type: "ROTATE",
+    adventurerId: 0,
+    rotator: rotateLeft,
+});
+
+console.log(serializeState(myState));
