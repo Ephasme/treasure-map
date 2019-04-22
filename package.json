@@ -1,0 +1,32 @@
+{
+  "name": "treasure-map",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:Ephasme/treasure-map.git",
+  "author": "Loup Peluso <loup.peluso@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint:fix": "tslint --project tsconfig.json --fix",
+    "test:watch": "jest --watch",
+    "test:cover": "jest --coverage",
+    "start:debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "dependencies": {
+    "@types/node": "^11.13.4",
+    "immutable": "^4.0.0-rc.12",
+    "typescript": "^3.4.3",
+    "yarg": "^1.0.8"
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.5",
+    "@types/jest": "^24.0.11",
+    "nodemon": "^1.18.11",
+    "faker": "^4.1.0",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.15.0"
+  }
+}
