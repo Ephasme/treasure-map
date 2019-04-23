@@ -1,5 +1,5 @@
-import { IVector, add, make } from "./vector";
-import { IDirection, North, South, East, West } from "./directions";
+import { East, IDirection, North, South, West } from "./directions";
+import { add, IVector } from "./vector";
 
 export const move: (direction: IDirection) => Mover =
     (direction) => (vector) => add(vector, direction);

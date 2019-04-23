@@ -8,9 +8,9 @@ export const Left: ILeft = { name: "Left", value: -1 };
 
 export type IRotation = IRight | ILeft;
 
-export type Rotator = (direction: IDirection) => IDirection;
+export type Rotate = (direction: IDirection) => IDirection;
 
-export const rotate: (rotation: IRotation) => Rotator = (rotation) => (direction) => {
+export const rotate: (rotation: IRotation) => Rotate = (rotation) => (direction) => {
     return Directions[((direction.id + rotation.value) + 4) % 4];
 };
 

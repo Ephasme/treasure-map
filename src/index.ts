@@ -1,9 +1,7 @@
-import { moveNorth, Mover } from "./utils/moves";
-import { IVector, add, equals } from "./utils/vector";
-import { Map, Set, List } from "immutable";
-import { IRotation, Rotator, rotateLeft } from "./utils/rotations";
+import { Map } from "immutable";
 import { IDirection, North } from "./utils/directions";
-import { taggedTemplateExpression } from "@babel/types";
+import { rotateLeft, Rotate } from "./utils/rotations";
+import { add, equals, IVector } from "./utils/vector";
 
 type Id = number;
 
@@ -80,7 +78,7 @@ interface IMoveCommand {
 interface IRotateCommand {
     readonly type: ROTATE_COMMAND_TYPE;
     readonly adventurerId: Id;
-    readonly rotator: Rotator;
+    readonly rotator: Rotate;
 }
 
 type CommandHandler<T> = (state: IGameState, command: T) => IGameState;
