@@ -8,8 +8,7 @@ module.exports = {
     "collectCoverageFrom": [
         "src/**/*.ts",
         "!src/index.ts",
-        "!**/__fixtures__/**",
-        "!**/__tests_utils__/**"
+        "!src/__fixtures__/**/*.*"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "moduleFileExtensions": [
