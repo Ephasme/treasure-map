@@ -9,6 +9,11 @@ export type CommandHandler<T> = (state: GameState, command: T) => GameState;
 export type RotateCommandHandler = CommandHandler<IRotateCommand>;
 export type MoveCommandHandler = CommandHandler<IMoveCommand>;
 
+/**
+ * Responsible to handle move commands.
+ * @param state previous state.
+ * @param command the move command.
+ */
 export const moveCommandHandler: MoveCommandHandler = (state, command) => {
     const adventurer = findAdventurer(state.objects, command.adventurerId);
 
@@ -36,6 +41,11 @@ export const moveCommandHandler: MoveCommandHandler = (state, command) => {
     };
 };
 
+/**
+ * Responsible to handle the rotate command.
+ * @param state the previous state.
+ * @param command the rotate command.
+ */
 export const rotateCommandHandler: RotateCommandHandler = (state, command) => {
     const {
         rotator,
