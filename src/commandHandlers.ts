@@ -15,29 +15,30 @@ export type MoveCommandHandler = CommandHandler<IMoveCommand>;
  * @param command the move command.
  */
 export const moveCommandHandler: MoveCommandHandler = (state, command) => {
-    const adventurer = findAdventurer(state.objects, command.adventurerId);
+    const { adventurerId } = command;
+    const { objects, mapSize } = state;
 
-    const {
-        location,
-        orientation,
-    } = adventurer;
+    const adventurer = findAdventurer(objects, adventurerId);
 
-    const newAdventurer: IAdventurer = {
-        ...adventurer,
-        location: add(location, orientation),
-    };
+    const { orientation, name } = adventurer;
+    let { location } = adventurer;
 
-    if (!isLocationValid(state.mapSize, newAdventurer.location)) {
-        throw new Error(`Invalid location: (${newAdventurer.location.x}, ${newAdventurer.location.y}).`);
+    location = add(location, orientation);
+
+    if (!isLocationValid(mapSize, location)) {
+        throw new Error(`Adventurer ${name} has an invalid location: (${location.x}, ${location.y}).`);
     }
 
-    if (getOccupant(state.objects, newAdventurer.location)) {
+    if (getOccupant(objects, location)) {
         return state; // Ignore the move command.
     }
 
     return {
         ...state,
-        objects: state.objects.set(command.adventurerId, newAdventurer),
+        objects: objects.set(adventurerId, {
+            ...adventurer,
+            location,
+        }),
     };
 };
 
@@ -47,13 +48,13 @@ export const moveCommandHandler: MoveCommandHandler = (state, command) => {
  * @param command the rotate command.
  */
 export const rotateCommandHandler: RotateCommandHandler = (state, command) => {
-    const {
-        rotator,
-    } = command;
-    const adventurer = findAdventurer(state.objects, command.adventurerId);
-    const newAdventurer: IAdventurer = { ...adventurer, orientation: rotator(adventurer.orientation) };
+    const { rotator, adventurerId } = command;
+    const { objects } = state;
+    const adventurer = findAdventurer(objects, adventurerId);
+    const { orientation } = adventurer;
+    const newAdventurer: IAdventurer = { ...adventurer, orientation: rotator(orientation) };
     return {
         ...state,
-        objects: state.objects.set(command.adventurerId, newAdventurer),
+        objects: objects.set(adventurerId, newAdventurer),
     };
 };

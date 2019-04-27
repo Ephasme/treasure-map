@@ -11,3 +11,9 @@ export type GameState = Readonly<{
     readonly adventurersOrder: AdventurersOrderState;
     readonly objects: ObjectsState;
 }>;
+
+export const createInitialState: (mapSize: IVector) => GameState = (mapSize) => ({
+    mapSize,
+    adventurersOrder: [],
+    objects: Map(),
+});

@@ -1,7 +1,7 @@
 import { buildGameState } from "../../__fixtures__/buildGameState";
 import { rotateCommandHandler } from "../../commandHandlers";
-import { East, South } from "../../utils/directions";
 import { IAdventurer } from "../../models";
+import { East, South } from "../../utils/directions";
 
 it("should call rotator on the adventurer", () => {
     const gameState = buildGameState();
