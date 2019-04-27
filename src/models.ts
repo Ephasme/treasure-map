@@ -12,10 +12,12 @@ export interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
     readonly orientation: IDirection;
     readonly name: string;
+    readonly moves: string;
 }
 
 export interface ITreasure extends IGameObject {
     readonly type: "Treasure";
+    readonly quantity: number;
 }
 
 export interface IMountain extends IGameObject {
