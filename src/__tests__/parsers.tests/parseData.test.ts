@@ -6,7 +6,8 @@ import { GameState } from "../../state";
 import { North } from "../../utils/directions";
 
 it("should work", async () => {
-    const data = `C - 4 - 4
+    const data = `# comment
+C - 4 - 4
 M - 2 - 1
 T - 1 - 1 - 4
 A - Loup - 0 - 0 - N - AAAGAA`;

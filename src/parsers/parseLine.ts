@@ -1,7 +1,7 @@
 import { parseAdventurer, parseMap, parseMountain, parseTreasure } from ".";
 import { AnyObject } from "../models";
 import { IVector } from "../utils/vector";
-import { parseComment, IComment } from "./parseComment";
+import { IComment, parseComment } from "./parseComment";
 
 export const parseLine: (line: string) => AnyObject | IVector | IComment = (line: string) => {
     const result =

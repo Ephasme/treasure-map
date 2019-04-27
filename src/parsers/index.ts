@@ -6,4 +6,5 @@ export * from "./parseMap";
 export * from "./parseOrientation";
 export * from "./parseLines";
 export * from "./parseStream";
+export * from "./parseComment";
 export * from "./parseTreasure";

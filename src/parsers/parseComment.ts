@@ -1,5 +1,3 @@
-import { IMountain } from "../models";
-
 const regexp = /^#(.*)$/;
 
 export interface IComment {
@@ -9,7 +7,7 @@ export interface IComment {
 export const parseComment: (input: string) => IComment | null = (input) => {
     const regResult = regexp.exec(input);
     if (regResult) {
-        return { comment: regResult[1] };
+        return { comment: regResult[1].trim() };
     }
     return null;
-}
+};
