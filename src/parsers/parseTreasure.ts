@@ -1,9 +1,9 @@
 import { ITreasure } from "../models";
 
-const treasureRegexp = /^T - (\d+) - (\d+) - (\d+)$/;
+const regexp = /^T - (\d+) - (\d+) - (\d+)$/;
 
 export const parseTreasure: (input: string) => ITreasure | null = (input) => {
-    const regResult = treasureRegexp.exec(input);
+    const regResult = regexp.exec(input);
     if (regResult) {
         return {
             type: "Treasure",

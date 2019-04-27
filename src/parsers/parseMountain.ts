@@ -1,9 +1,9 @@
 import { IMountain } from "../models";
 
-const mountainRegexp = /^M - (\d+) - (\d+)$/;
+const regexp = /^M - (\d+) - (\d+)$/;
 
 export const parseMountain: (input: string) => IMountain | null = (input) => {
-    const regResult = mountainRegexp.exec(input);
+    const regResult = regexp.exec(input);
     if (regResult) {
         return {
             type: "Mountain",

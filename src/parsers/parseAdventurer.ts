@@ -1,10 +1,10 @@
 import { IAdventurer } from "../models";
 import { parseOrientation } from "./parseOrientation";
 
-const adventurerRegexp = /^A - (\w+) - (\d+) - (\d+) - ([NSEO]) - ([AGD]+)$/;
+const regexp = /^A - (\w+) - (\d+) - (\d+) - ([NSEO]) - ([AGD]+)$/;
 
 export const parseAdventurer: (input: string) => IAdventurer | null = (input) => {
-    const regResult = adventurerRegexp.exec(input);
+    const regResult = regexp.exec(input);
     if (regResult) {
         return {
             type: "Adventurer",

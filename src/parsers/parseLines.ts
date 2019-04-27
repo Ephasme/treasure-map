@@ -11,7 +11,9 @@ export const parseLines: (lines: string[]) => GameState = (lines) => {
 
     for (const line of lines) {
         const result = parseLine(line);
-        if ("type" in result) {
+        if ("comment" in result) {
+            continue;
+        } else if ("type" in result) {
             const id = nextObjectId++;
             objects = objects.set(id, result);
             if (result.type === "Adventurer") {

@@ -1,9 +1,9 @@
 import { IVector } from "../utils/vector";
 
-const mapRegexp = /^C - (\d+) - (\d+)$/;
+const regexp = /^C - (\d+) - (\d+)$/;
 
 export const parseMap: (input: string) => IVector | null = (input) => {
-    const regResult = mapRegexp.exec(input);
+    const regResult = regexp.exec(input);
     if (regResult) {
         return {
             x: parseInt(regResult[1]),
