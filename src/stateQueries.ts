@@ -42,7 +42,7 @@ export const findAdventurer = (objects: ObjectsState, id: Id): IAdventurer => {
  * Iterate over all the adventurers in order.
  * @param state the game state.
  */
-export function *forEachAdventurers(state: GameState): IterableIterator<IAdventurer> {
+export function *getAdventurers(state: GameState): IterableIterator<IAdventurer> {
     for (const id of state.adventurersOrder) {
         const obj = state.objects.get(id);
         if (obj && obj.type === "Adventurer") {
