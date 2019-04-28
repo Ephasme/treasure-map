@@ -10,7 +10,7 @@ import { vector } from "../../utils/vector";
 it("should dispatch the proper mutation", () => {
     const { store, dispatch } = mockStore();
     const adventurer = withId(2, store.getState().objects.get(2)! as IAdventurer);
-    moveForwardCommand(adventurer)(store);
+    moveForwardCommand(store)(adventurer);
     const expectedMutation: ISetAdventurerLocation = {
         type: "SET_ADVENTURER_LOCATION",
         payload: {
@@ -29,7 +29,7 @@ it("should not move the adventurer if location is occupied", () => {
             [1, buildAdventurer({ location: vector(1, 3), orientation: North })],
         ]),
     });
-    moveForwardCommand(adventurer)(store);
+    moveForwardCommand(store)(adventurer);
     expect(dispatch).not.toBeCalled();
 });
 
@@ -40,5 +40,5 @@ it("should throw if location is invalid", () => {
             [0, adventurer],
         ]),
     });
-    expect(() => moveForwardCommand(withId(0, adventurer))(store)).toThrow();
+    expect(() => moveForwardCommand(store)(withId(0, adventurer))).toThrow();
 });

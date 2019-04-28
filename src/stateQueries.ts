@@ -1,6 +1,18 @@
 import { IAdventurer, Id, WithId, withId } from "./models";
 import { GameState, MapSizeState, ObjectsState } from "./store/state";
+import { IStore } from "./store/store";
 import { equals, IVector } from "./utils/vector";
+
+/**
+ * Returns true if some adventurers have some moves.
+ * @param objects the state.
+ */
+export const hasMovesFactory = (store: IStore) => (): boolean => {
+    return !!store.getState().objects.find((x) => {
+        return x.type === "Adventurer"
+            && !x.moves.isEmpty();
+    });
+};
 
 /**
  * If this function returns an object's id the location is occupied by this object.

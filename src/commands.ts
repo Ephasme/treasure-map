@@ -5,23 +5,22 @@ import { IStore } from "./store/store";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
 import { add } from "./utils/vector";
 
-export type Request<TResult> = (store: IStore) => TResult;
+export type MoveForwardCommand = (adventurer: WithId<IAdventurer>) => void;
+export type MoveForwardCommandFactory = (store: IStore) => MoveForwardCommand;
 
-export type MoveForwardCommandFactory = (adventurer: WithId<IAdventurer>) => Request<void>;
-export type RotateCommandFactory = (adventurer: WithId<IAdventurer>, rotator: Rotate) => Request<void>;
+export type RotateCommand = (adventurer: WithId<IAdventurer>, rotator: Rotate) => void;
+export type RotateCommandFactory = (store: IStore) => RotateCommand;
 export type MoveCommandFactory = (
-    moveForward: MoveForwardCommandFactory,
-    rotate: RotateCommandFactory,
-    adventurerId: Id) => Request<void>;
+    store: IStore,
+    moveForward: MoveForwardCommand,
+    rotate: RotateCommand) =>
+    (adventurer: WithId<IAdventurer>) => void;
 
 /**
  * Executes the next move of the given adventurer.
  * @param adventurerId the id of the adventurer.
  */
-export const moveCommand: MoveCommandFactory = (moveForward, rotate, adventurerId) => (store) => {
-    const { objects } = store.getState();
-    const adventurer = findAdventurer(objects, adventurerId);
-
+export const moveCommand: MoveCommandFactory = (store, moveForward, rotate) => (adventurer) => {
     let { moves } = adventurer;
     const currentMove = moves.first(null);
 
@@ -32,7 +31,7 @@ export const moveCommand: MoveCommandFactory = (moveForward, rotate, adventurerI
             case "D": rotate(adventurer, right); break;
             case "G": rotate(adventurer, left); break;
         }
-        store.dispatch(setAdventurerMoves(adventurerId, moves));
+        store.dispatch(setAdventurerMoves(adventurer.id, moves));
     }
 };
 
@@ -41,7 +40,7 @@ export const moveCommand: MoveCommandFactory = (moveForward, rotate, adventurerI
  * @param state previous state.
  * @param command the move command.
  */
-export const moveForwardCommand: MoveForwardCommandFactory = (adventurer) => (store) => {
+export const moveForwardCommand: MoveForwardCommandFactory = (store) => (adventurer) => {
     const { mapSize, objects } = store.getState();
     const { id, orientation, name } = adventurer;
     let { location } = adventurer;
@@ -64,7 +63,7 @@ export const moveForwardCommand: MoveForwardCommandFactory = (adventurer) => (st
  * @param state the previous state.
  * @param command the rotate command.
  */
-export const rotateCommand: RotateCommandFactory = (adventurer, rotator) => (store) => {
+export const rotateCommand: RotateCommandFactory = (store) => (adventurer, rotator) => {
     const { id, orientation } = adventurer;
     store.dispatch(setAdventurerOrientation(id, rotator(orientation)));
 };
