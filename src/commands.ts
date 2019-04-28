@@ -4,6 +4,13 @@ import { findAdventurer, getOccupant, isLocationValid } from "./stateQueries";
 import { Rotate, rotateRight } from "./utils/rotations";
 import { add } from "./utils/vector";
 
+export const runNextMoveCommand = (state: GameState, adventurerId: Id) => {
+    const { objects } = state;
+    const adventurer = findAdventurer(objects, adventurerId);
+
+    const nextMove = adventurer.moves.first();
+}
+
 /**
  * Responsible to handle move commands.
  * @param state previous state.
