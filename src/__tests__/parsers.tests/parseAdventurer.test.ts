@@ -1,3 +1,4 @@
+import { Stack } from "immutable";
 import { IAdventurer } from "../../models";
 import { parseAdventurer } from "../../parsers";
 import { South } from "../../utils/directions";
@@ -9,7 +10,7 @@ it("should parse a mountain", () => {
         type: "Adventurer",
         name: "Loup",
         orientation: South,
-        moves: "AADGA",
+        moves: Stack("AADGA"),
         location: vector(1, 17),
         traversable: false,
     };

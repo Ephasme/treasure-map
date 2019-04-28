@@ -1,3 +1,4 @@
+import { Stack } from "immutable";
 import { IDirection } from "./utils/directions";
 import { IVector } from "./utils/vector";
 
@@ -11,8 +12,8 @@ export interface IGameObject {
 export interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
     readonly orientation: IDirection;
+    readonly moves: Stack<string>;
     readonly name: string;
-    readonly moves: string;
 }
 
 export interface ITreasure extends IGameObject {

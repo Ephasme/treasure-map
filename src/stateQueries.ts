@@ -1,5 +1,5 @@
 import { IAdventurer, Id } from "./models";
-import { MapSizeState, ObjectsState } from "./state";
+import { GameState, MapSizeState, ObjectsState } from "./state";
 import { equals, IVector } from "./utils/vector";
 
 /**
@@ -37,3 +37,16 @@ export const findAdventurer = (objects: ObjectsState, id: Id): IAdventurer => {
     }
     return adventurer;
 };
+
+/**
+ * Iterate over all the adventurers in order.
+ * @param state the game state.
+ */
+export function *forEachAdventurers(state: GameState): IterableIterator<IAdventurer> {
+    for (const id of state.adventurersOrder) {
+        const obj = state.objects.get(id);
+        if (obj && obj.type === "Adventurer") {
+            yield state.objects.get(id) as IAdventurer;
+        }
+    }
+}

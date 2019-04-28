@@ -1,3 +1,4 @@
+import { Stack } from "immutable";
 import { IAdventurer } from "../models";
 import { parseOrientation } from "./parseOrientation";
 
@@ -12,7 +13,7 @@ export const parseAdventurer: (input: string) => IAdventurer | null = (input) =>
             name: regResult[1],
             location: {x: parseInt(regResult[2]), y: parseInt(regResult[3])},
             orientation: parseOrientation(regResult[4]),
-            moves: regResult[5],
+            moves: Stack(regResult[5]),
         };
     }
     return null;

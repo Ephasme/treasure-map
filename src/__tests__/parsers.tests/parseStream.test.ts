@@ -1,4 +1,4 @@
-import { Map } from "immutable";
+import { Map, Stack } from "immutable";
 import { Readable } from "stream";
 import { AnyObject, IAdventurer, IMountain, ITreasure } from "../../models";
 import { parseStream } from "../../parsers";
@@ -18,7 +18,7 @@ A - Loup - 0 - 0 - N - AAAGAA`;
     const adventurer: IAdventurer = {
         type: "Adventurer",
         location: {x: 0, y: 0},
-        moves: "AAAGAA",
+        moves: Stack("AAAGAA"),
         name: "Loup",
         orientation: North,
         traversable: false,

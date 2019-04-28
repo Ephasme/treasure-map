@@ -1,7 +1,7 @@
 import { Map } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { buildGameState } from "../../__fixtures__/buildGameState";
-import { moveCommandHandler } from "../../commandHandlers";
+import { moveCommand } from "../../commands";
 import { IAdventurer } from "../../models";
 import { GameState } from "../../state";
 import { North } from "../../utils/directions";
@@ -9,10 +9,7 @@ import { vector } from "../../utils/vector";
 
 it("should move the adventurer", () => {
     const gameState = buildGameState();
-    const newState = moveCommandHandler(gameState, {
-        type: "MOVE",
-        adventurerId: 2,
-    });
+    const newState = moveCommand(gameState, 2);
     const expected: GameState = {
         ...gameState,
         objects: Map([
@@ -33,10 +30,7 @@ it("should not move the adventurer if location is occupied", () => {
             [1, buildAdventurer({ location: vector(1, 3), orientation: North })],
         ]),
     });
-    const newState = moveCommandHandler(gameState, {
-        type: "MOVE",
-        adventurerId: 0,
-    });
+    const newState = moveCommand(gameState, 0);
     expect(newState).toEqual(gameState);
 });
 
@@ -46,8 +40,5 @@ it("should throw if location is invalid", () => {
             [0, buildAdventurer({ location: vector(3, 3), orientation: North })],
         ]),
     });
-    expect(() => moveCommandHandler(gameState, {
-        type: "MOVE",
-        adventurerId: 0,
-    })).toThrow();
+    expect(() => moveCommand(gameState, 0)).toThrow();
 });
