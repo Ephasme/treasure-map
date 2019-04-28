@@ -9,7 +9,7 @@ it("should get adventurer", () => {
         [1, buildAdventurer()],
     ]);
     const result = findAdventurer(state, 1);
-    expect(result).toBe(state.get(1));
+    expect(result).toEqual({ id: 1, ...state.get(1) });
 });
 
 it("should throw when adventurer does not exist", () => {

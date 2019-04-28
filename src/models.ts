@@ -2,6 +2,9 @@ import { Stack } from "immutable";
 import { IDirection } from "./utils/directions";
 import { IVector } from "./utils/vector";
 
+export type WithId<T> = T & { id: Id };
+export const withId: <T>(id: Id, t: T) => WithId<T> = (id, t) => ({ ...t, id });
+
 export type Id = number;
 
 export interface IGameObject {

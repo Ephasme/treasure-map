@@ -1,4 +1,4 @@
-import { IAdventurer, Id } from "./models";
+import { IAdventurer, Id, WithId, withId } from "./models";
 import { GameState, MapSizeState, ObjectsState } from "./store/state";
 import { equals, IVector } from "./utils/vector";
 
@@ -30,23 +30,23 @@ export const isLocationValid = (mapSize: MapSizeState, location: IVector): boole
  * @param objects the current list of objects.
  * @param id the adventurer's id.
  */
-export const findAdventurer = (objects: ObjectsState, id: Id): IAdventurer => {
+export const findAdventurer = (objects: ObjectsState, id: Id): WithId<IAdventurer> => {
     const adventurer = objects.get(id);
     if (!adventurer || adventurer.type !== "Adventurer") {
         throw new Error("Not found.");
     }
-    return adventurer;
+    return withId(id, adventurer);
 };
 
 /**
  * Iterate over all the adventurers in order.
  * @param state the game state.
  */
-export function *getAdventurers(state: GameState): IterableIterator<IAdventurer> {
+export function *getAdventurers(state: GameState): IterableIterator<WithId<IAdventurer>> {
     for (const id of state.adventurersOrder) {
-        const obj = state.objects.get(id);
-        if (obj && obj.type === "Adventurer") {
-            yield state.objects.get(id) as IAdventurer;
+        const adventurer = state.objects.get(id);
+        if (adventurer && adventurer.type === "Adventurer") {
+            yield withId(id, adventurer);
         }
     }
 }
