@@ -2,7 +2,7 @@ import { Map, Stack } from "immutable";
 import { Readable } from "stream";
 import { AnyObject, IAdventurer, IMountain, ITreasure } from "../../models";
 import { parseStream } from "../../parsers";
-import { GameState } from "../../state";
+import { GameState } from "../../store/state";
 import { North } from "../../utils/directions";
 
 it("should work", async () => {
@@ -10,7 +10,7 @@ it("should work", async () => {
 C - 4 - 4
 M - 2 - 1
 T - 1 - 1 - 4
-A - Loup - 0 - 0 - N - AAAGAA`;
+A - Loup - 0 - 0 - N - AAAGADA`;
     const stream = new Readable();
     stream.push(data, "utf8");
     stream.push(null);
@@ -18,7 +18,7 @@ A - Loup - 0 - 0 - N - AAAGAA`;
     const adventurer: IAdventurer = {
         type: "Adventurer",
         location: {x: 0, y: 0},
-        moves: Stack("AAAGAA"),
+        moves: Stack(["A", "A", "A", "G", "A", "D", "A"]),
         name: "Loup",
         orientation: North,
         traversable: false,

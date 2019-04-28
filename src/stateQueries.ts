@@ -1,5 +1,5 @@
 import { IAdventurer, Id } from "./models";
-import { GameState, MapSizeState, ObjectsState } from "./state";
+import { GameState, MapSizeState, ObjectsState } from "./store/state";
 import { equals, IVector } from "./utils/vector";
 
 /**

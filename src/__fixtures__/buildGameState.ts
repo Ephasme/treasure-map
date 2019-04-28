@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 import { AnyObject } from "../models";
-import { GameState } from "../state";
+import { GameState } from "../store/state";
 import { East, South } from "../utils/directions";
 import { buildAdventurer } from "./buildAdventurer";
 import { buildMountain } from "./buildMountain";

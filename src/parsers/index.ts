@@ -1,6 +1,5 @@
 export * from "./parseMountain";
 export * from "./parseAdventurer";
-export * from "./parseFile";
 export * from "./parseLine";
 export * from "./parseMap";
 export * from "./parseOrientation";

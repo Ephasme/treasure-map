@@ -1,6 +1,6 @@
 import { Map } from "immutable";
-import { AnyObject, Id } from "./models";
-import { IVector } from "./utils/vector";
+import { AnyObject, Id } from "../models";
+import { IVector } from "../utils/vector";
 
 export type ObjectsState = Map<Id, AnyObject>;
 export type MapSizeState = IVector;

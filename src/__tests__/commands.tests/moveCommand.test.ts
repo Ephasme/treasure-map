@@ -1,44 +1,40 @@
 import { Map } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
-import { buildGameState } from "../../__fixtures__/buildGameState";
+import { mockStore } from "../../__fixtures__/mockStateManager";
 import { moveCommand } from "../../commands";
-import { IAdventurer } from "../../models";
-import { GameState } from "../../state";
+import { ISetAdventurerLocation } from "../../store/mutations";
 import { North } from "../../utils/directions";
 import { vector } from "../../utils/vector";
 
-it("should move the adventurer", () => {
-    const gameState = buildGameState();
-    const newState = moveCommand(gameState, 2);
-    const expected: GameState = {
-        ...gameState,
-        objects: Map([
-            ...gameState.objects.toArray(),
-            [2, {
-                ...gameState.objects.get(2) as IAdventurer,
-                location: vector(2, 1),
-            }],
-        ]),
+it("should dispatch the proper mutation", () => {
+    const { store, dispatch } = mockStore();
+    moveCommand(2)(store);
+    const expectedMutation: ISetAdventurerLocation = {
+        type: "SET_ADVENTURER_LOCATION",
+        payload: {
+            id: 2,
+            location: {x: 2, y: 1},
+        },
     };
-    expect(newState).toEqual(expected);
+    expect(dispatch).toBeCalledWith(expectedMutation);
 });
 
 it("should not move the adventurer if location is occupied", () => {
-    const gameState = buildGameState({
+    const { store, dispatch } = mockStore({
         objects: Map([
             [0, buildAdventurer({ location: vector(1, 2), orientation: North })],
             [1, buildAdventurer({ location: vector(1, 3), orientation: North })],
         ]),
     });
-    const newState = moveCommand(gameState, 0);
-    expect(newState).toEqual(gameState);
+    moveCommand(0)(store);
+    expect(dispatch).not.toBeCalled();
 });
 
 it("should throw if location is invalid", () => {
-    const gameState = buildGameState({
+    const { store } = mockStore({
         objects: Map([
             [0, buildAdventurer({ location: vector(3, 3), orientation: North })],
         ]),
     });
-    expect(() => moveCommand(gameState, 0)).toThrow();
+    expect(() => moveCommand(0)(store)).toThrow();
 });

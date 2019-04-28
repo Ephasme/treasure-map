@@ -1,19 +1,24 @@
-import { buildGameState } from "../../__fixtures__/buildGameState";
+import { mockStore } from "../../__fixtures__/mockStateManager";
 import { rotateCommand } from "../../commands";
-import { IAdventurer } from "../../models";
+import { ISetAdventurerOrientation } from "../../store/mutations";
 import { East, South } from "../../utils/directions";
 
 it("should call rotator on the adventurer", () => {
-    const gameState = buildGameState();
+    const { store } = mockStore();
     const mockRotator = jest.fn();
-    rotateCommand(gameState, 2, mockRotator);
+    rotateCommand(2, mockRotator)(store);
     expect(mockRotator).toBeCalledWith(East);
 });
 
-it("should return different state", () => {
-    const gameState = buildGameState();
-    const newOrientation = South;
-    const mockRotator = jest.fn().mockReturnValue(newOrientation);
-    const newState = rotateCommand(gameState, 2, mockRotator);
-    expect((newState.objects.get(2) as IAdventurer).orientation).toBe(newOrientation);
+it("should dispatch the proper mutation", () => {
+    const { store, dispatch } = mockStore();
+    const mockRotator = jest.fn().mockReturnValue(South);
+
+    rotateCommand(2, mockRotator)(store);
+    const expectedMutation: ISetAdventurerOrientation = {
+        type: "SET_ADVENTURER_ORIENTATION",
+        payload: { id: 2, orientation: South },
+    };
+
+    expect(dispatch).toBeCalledWith(expectedMutation);
 });

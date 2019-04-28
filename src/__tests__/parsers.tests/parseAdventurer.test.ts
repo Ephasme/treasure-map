@@ -10,7 +10,7 @@ it("should parse a mountain", () => {
         type: "Adventurer",
         name: "Loup",
         orientation: South,
-        moves: Stack("AADGA"),
+        moves: Stack(["A", "A", "D", "G", "A"]),
         location: vector(1, 17),
         traversable: false,
     };

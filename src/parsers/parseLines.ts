@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 import { AnyObject } from "../models";
-import { GameState, MapSizeState } from "../state";
+import { GameState, MapSizeState } from "../store/state";
 import { parseLine } from "./parseLine";
 
 export const parseLines: (lines: string[]) => GameState = (lines) => {

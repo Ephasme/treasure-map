@@ -1,8 +1,8 @@
 import { Map } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { AnyObject } from "../../models";
-import { ObjectsState } from "../../state";
 import { findAdventurer } from "../../stateQueries";
+import { ObjectsState } from "../../store/state";
 
 it("should get adventurer", () => {
     const state: ObjectsState = Map<number, AnyObject>([

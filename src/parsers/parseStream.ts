@@ -1,6 +1,6 @@
 import * as readline from "readline";
 import { Readable } from "stream";
-import { GameState } from "../state";
+import { GameState } from "../store/state";
 import { parseLines } from "./parseLines";
 
 export const parseStream: (stream: Readable) => Promise<GameState> = (stream) => {

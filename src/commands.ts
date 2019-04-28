@@ -1,23 +1,22 @@
-import { IAdventurer, Id } from "./models";
-import { GameState } from "./state";
+import { Id } from "./models";
 import { findAdventurer, getOccupant, isLocationValid } from "./stateQueries";
-import { Rotate, rotateRight } from "./utils/rotations";
+import { setAdventurerLocation, setAdventurerOrientation } from "./store/mutations";
+import { IStore } from "./store/store";
+import { Rotate } from "./utils/rotations";
 import { add } from "./utils/vector";
 
-export const runNextMoveCommand = (state: GameState, adventurerId: Id) => {
-    const { objects } = state;
-    const adventurer = findAdventurer(objects, adventurerId);
+export type Request<TResult> = (store: IStore) => TResult;
 
-    const nextMove = adventurer.moves.first();
-}
+export type MoveCommandFactory = (adventurerId: Id) => Request<void>;
+export type RotateCommandFactory = (adventurerId: Id, rotator: Rotate) => Request<void>;
 
 /**
  * Responsible to handle move commands.
  * @param state previous state.
  * @param command the move command.
  */
-export const moveCommand = (state: GameState, adventurerId: Id) => {
-    const { objects, mapSize } = state;
+export const moveCommand: MoveCommandFactory = (adventurerId) => (store) => {
+    const { objects, mapSize } = store.getState();
 
     const adventurer = findAdventurer(objects, adventurerId);
 
@@ -31,16 +30,10 @@ export const moveCommand = (state: GameState, adventurerId: Id) => {
     }
 
     if (getOccupant(objects, location)) {
-        return state; // Ignore the move command.
+        return; // Ignore the move command.
     }
 
-    return {
-        ...state,
-        objects: objects.set(adventurerId, {
-            ...adventurer,
-            location,
-        }),
-    };
+    store.dispatch(setAdventurerLocation(adventurerId, location));
 };
 
 /**
@@ -48,13 +41,9 @@ export const moveCommand = (state: GameState, adventurerId: Id) => {
  * @param state the previous state.
  * @param command the rotate command.
  */
-export const rotateCommand = (state: GameState, adventurerId: Id, rotator: Rotate) => {
-    const { objects } = state;
+export const rotateCommand: RotateCommandFactory = (adventurerId, rotator) => (store) => {
+    const { objects } = store.getState();
     const adventurer = findAdventurer(objects, adventurerId);
     const { orientation } = adventurer;
-    const newAdventurer: IAdventurer = { ...adventurer, orientation: rotator(orientation) };
-    return {
-        ...state,
-        objects: objects.set(adventurerId, newAdventurer),
-    };
+    store.dispatch(setAdventurerOrientation(adventurerId, rotator(orientation)));
 };

@@ -1,7 +1,6 @@
-import * as yargs from "yargs";
 import * as fs from "fs";
-import { parseFile } from "./parsers";
-import { getAdventurers } from "./stateQueries";
+import * as yargs from "yargs";
+import { parseStream } from "./parsers";
 
 const args = yargs.option("f", {
     alias: "filename",
@@ -15,14 +14,7 @@ if (!fs.existsSync(filename)) {
     throw new Error(`File ${filename} does not exist.`);
 }
 
-parseFile(filename)
-    .then(state => {
-
-        for (const adventurer of getAdventurers(state)) {
-            const move = adventurer.moves.first();
-
-            
-        }
-
-
-    });
+parseStream(fs.createReadStream(filename)).then(() => {
+}).catch((err) => {
+    console.error(err);
+});
