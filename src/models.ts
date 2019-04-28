@@ -12,7 +12,7 @@ export interface IGameObject {
 export interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
     readonly orientation: IDirection;
-    readonly moves: Stack<string>;
+    readonly moves: Stack<"A" | "D" | "G">;
     readonly name: string;
 }
 

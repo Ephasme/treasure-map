@@ -7,7 +7,7 @@ export const buildAdventurer = (partialAdventurer?: Partial<IAdventurer>): IAdve
     type: "Adventurer",
     location: vector(5, 2),
     traversable: false,
-    moves: Stack<string>("GLAAAGG"),
+    moves: Stack(["G", "D", "A", "A", "A", "G", "G"]),
     orientation: North,
     name: "name",
     ...partialAdventurer,

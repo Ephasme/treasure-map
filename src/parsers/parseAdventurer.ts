@@ -13,7 +13,7 @@ export const parseAdventurer: (input: string) => IAdventurer | null = (input) =>
             name: regResult[1],
             location: {x: parseInt(regResult[2]), y: parseInt(regResult[3])},
             orientation: parseOrientation(regResult[4]),
-            moves: Stack(regResult[5]),
+            moves: Stack(Array.from(regResult[5]) as Array<"A" | "G" | "D">),
         };
     }
     return null;

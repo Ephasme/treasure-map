@@ -1,7 +1,7 @@
 import { IAdventurer, Id } from "./models";
 import { GameState } from "./state";
 import { findAdventurer, getOccupant, isLocationValid } from "./stateQueries";
-import { Rotate } from "./utils/rotations";
+import { Rotate, rotateRight } from "./utils/rotations";
 import { add } from "./utils/vector";
 
 /**
