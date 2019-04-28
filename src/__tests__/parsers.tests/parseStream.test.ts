@@ -5,6 +5,14 @@ import { parseStream } from "../../parsers";
 import { GameState } from "../../store/state";
 import { North } from "../../utils/directions";
 
+it("should reject promise when things are broken", async () => {
+    const data = `anything`;
+    const stream = new Readable();
+    stream.push(data, "utf8");
+    stream.push(null);
+    await expect(parseStream(stream)).rejects.toThrow();
+});
+
 it("should work", async () => {
     const data = `# comment
 C - 4 - 4

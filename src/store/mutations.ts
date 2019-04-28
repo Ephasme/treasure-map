@@ -1,5 +1,5 @@
 import { Stack } from "immutable";
-import { IAdventurer, Id } from "../models";
+import { AdventurerMove, IAdventurer, Id } from "../models";
 import { IDirection } from "../utils/directions";
 import { IVector } from "../utils/vector";
 import { ObjectsState } from "./state";
@@ -34,7 +34,7 @@ export interface ISetAdventurerMoves {
     type: typeof SET_ADVENTURER_MOVES;
     payload: {
         id: Id;
-        moves: Stack<"A" | "D" | "G">;
+        moves: Stack<AdventurerMove>;
     };
 }
 

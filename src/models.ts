@@ -12,10 +12,12 @@ export interface IGameObject {
     readonly traversable: boolean;
 }
 
+export type AdventurerMove = "A" | "D" | "G";
+
 export interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
     readonly orientation: IDirection;
-    readonly moves: Stack<"A" | "D" | "G">;
+    readonly moves: Stack<AdventurerMove>;
     readonly name: string;
 }
 
