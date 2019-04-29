@@ -15,13 +15,12 @@ export const hasMovesFactory = (store: IStore) => (): boolean => {
 };
 
 /**
- * If this function returns an object's id the location is occupied by this object.
- * Otherwise it returns undefined and it means that the location is free.
+ * If this function whether the location is occupied or not.
  * @param objects the current state of the world
  * @param location the location to test
  */
-export const getOccupant = (objects: ObjectsState, location: IVector): Id | undefined => {
-    return objects
+export const isOccupied = (objects: ObjectsState, location: IVector): boolean => {
+    return !!objects
         .filter((x) => !x.traversable)
         .map((x) => x.location)
         .findKey((vector) => equals(vector, location));

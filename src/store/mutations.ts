@@ -5,7 +5,6 @@ import { IVector } from "../utils/vector";
 import { ObjectsState } from "./state";
 
 export type Dispatch = (mutation: AnyMutation) => void;
-export type UpdateObject<T> = (objects: ObjectsState, id: Id, type: string, newObject: Partial<T>) => T;
 export type UpdateAdventurer = (objects: ObjectsState, id: Id, newAdventurer: Partial<IAdventurer>) => IAdventurer;
 export type UpdateTreasure = (objects: ObjectsState, id: Id, newTreasure: Partial<ITreasure>) => ITreasure;
 export type SetAdventurerLocation = (id: Id, location: IVector) => ISetAdventurerLocation;
@@ -55,14 +54,6 @@ export type AnyMutation =
     | ISetAdventurerOrientation
     | IChangeTreasureQuantity
     ;
-
-export const update: UpdateObject = (objects, id, type, treasure) => {
-    const adventurer = objects.get(id);
-    if (adventurer && adventurer.type === type) {
-        return Object.assign({}, adventurer, treasure);
-    }
-    throw new Error(`Object ${id} is not an adventurer.`);
-};
 
 export const updateTreasure: UpdateTreasure = (objects, id, treasure) => {
     const adventurer = objects.get(id);
