@@ -1,5 +1,5 @@
-import { IAdventurer, Id, WithId } from "./models";
-import { findAdventurer, getOccupant, isLocationValid } from "./stateQueries";
+import { IAdventurer, WithId } from "./models";
+import { getOccupant, isLocationValid } from "./stateQueries";
 import { setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
 import { IStore } from "./store/store";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";

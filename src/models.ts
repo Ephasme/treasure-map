@@ -33,4 +33,5 @@ export interface IMountain extends IGameObject {
 export type AnyObject =
     | ITreasure
     | IMountain
-    | IAdventurer;
+    | IAdventurer
+    ;
