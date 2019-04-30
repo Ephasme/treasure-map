@@ -7,6 +7,7 @@ export type Dispatch = (mutation: AnyMutation) => void;
 export type SetAdventurerLocation = (id: Id, location: IVector) => ISetAdventurerLocation;
 export type SetAdventurerOrientation = (id: Id, orientation: IDirection) => ISetAdventurerOrientation;
 export type SetAdventurerMoves = (id: Id, moves: Stack<AdventurerMove>) => ISetAdventurerMoves;
+export type ChangeTreasureQuantity = (id: Id, quantity: number) => IChangeTreasureQuantity;
 
 export const SET_ADVENTURER_LOCATION = "SET_ADVENTURER_LOCATION";
 export const SET_ADVENTURER_ORIENTATION = "SET_ADVENTURER_ORIENTATION";
@@ -52,7 +53,7 @@ export type AnyMutation =
     | IChangeTreasureQuantity
     ;
 
-export const changeTreasureQuantity = (id: Id, quantity: number) => ({
+export const changeTreasureQuantity: ChangeTreasureQuantity = (id: Id, quantity: number) => ({
     type: CHANGE_TREASURE_QUANTITY,
     payload: { id, quantity },
 });
