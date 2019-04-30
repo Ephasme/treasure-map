@@ -1,5 +1,5 @@
+import { IStore } from "../store/IStore";
 import { GameState } from "../store/state";
-import { IStore } from "../store/store";
 import { buildGameState } from "./buildGameState";
 
 export function mockStore(gameState?: Partial<GameState>) {

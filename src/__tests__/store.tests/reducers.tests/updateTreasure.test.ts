@@ -1,8 +1,8 @@
 import { Map } from "immutable";
-import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
-import { buildGameState } from "../../__fixtures__/buildGameState";
-import { ITreasure } from "../../models";
-import { updateTreasure } from "../../store/reducers";
+import { buildAdventurer } from "../../../__fixtures__/buildAdventurer";
+import { buildGameState } from "../../../__fixtures__/buildGameState";
+import { ITreasure } from "../../../models";
+import { updateTreasure } from "../../../store/reducers";
 
 it("should update treasure", () => {
     const state = buildGameState({

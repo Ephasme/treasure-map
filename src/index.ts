@@ -4,8 +4,8 @@ import { createMoveCommand, createMoveForwardCommand, createRotateCommand } from
 import { parseStream } from "./parsers";
 import { getAdventurers, hasMovesFactory as hasMovesFactory } from "./stateQueries";
 import { createMainReducer, createObjectsReducer } from "./store/reducers";
-import { Store } from "./store/store";
-import { updateAdventurer, updateTreasure } from "./store/updaters";
+import { updateAdventurer, updateTreasure } from "./store/reducers";
+import { Store } from "./store/Store";
 
 const args = yargs.option("f", {
     alias: "filename",

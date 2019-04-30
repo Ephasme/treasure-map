@@ -1,7 +1,7 @@
-import { buildGameState } from "../../__fixtures__/buildGameState";
-import { setAdventurerLocation } from "../../store/mutations";
-import { createMainReducer } from "../../store/reducers";
-import { vector } from "../../utils/vector";
+import { buildGameState } from "../../../__fixtures__/buildGameState";
+import { setAdventurerLocation } from "../../../store/mutations";
+import { createMainReducer } from "../../../store/reducers";
+import { vector } from "../../../utils/vector";
 
 it("should create a reducer", () => {
     const mock = jest.fn();

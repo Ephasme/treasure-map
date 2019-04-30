@@ -1,7 +1,7 @@
 import { IAdventurer, WithId } from "./models";
 import { isLocationValid, isOccupied, isOccupied as getOccupant } from "./stateQueries";
+import { IStore } from "./store/IStore";
 import { setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
-import { IStore } from "./store/store";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
 import { add } from "./utils/vector";
 
