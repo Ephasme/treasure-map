@@ -2,7 +2,7 @@ import { Stack } from "immutable";
 import { Map } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { mockStore } from "../../__fixtures__/mockStateManager";
-import { moveCommand } from "../../commands";
+import { createMoveCommand } from "../../commands";
 import { AdventurerMove, AnyObject, withId } from "../../models";
 import { rotateLeft, rotateRight } from "../../utils/rotations";
 
@@ -15,7 +15,7 @@ function prepareTest(moves: AdventurerMove[]) {
     });
     const moveForward = jest.fn();
     const rotate = jest.fn();
-    const command = () => moveCommand(store, moveForward, rotate)(adv);
+    const command = () => createMoveCommand(store, moveForward, rotate)(adv);
     return { adv, moveForward, rotate, command };
 }
 

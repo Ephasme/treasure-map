@@ -1,5 +1,5 @@
 import { IAdventurer, WithId } from "./models";
-import { getOccupant, isLocationValid } from "./stateQueries";
+import { isLocationValid, isOccupied, isOccupied as getOccupant } from "./stateQueries";
 import { setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
 import { IStore } from "./store/store";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
@@ -20,7 +20,7 @@ export type MoveCommandFactory = (
  * Executes the next move of the given adventurer.
  * @param adventurerId the id of the adventurer.
  */
-export const moveCommand: MoveCommandFactory = (store, moveForward, rotate) => (adventurer) => {
+export const createMoveCommand: MoveCommandFactory = (store, moveForward, rotate) => (adventurer) => {
     let { moves } = adventurer;
     const currentMove = moves.first(null);
 
@@ -40,7 +40,7 @@ export const moveCommand: MoveCommandFactory = (store, moveForward, rotate) => (
  * @param state previous state.
  * @param command the move command.
  */
-export const moveForwardCommand: MoveForwardCommandFactory = (store) => (adventurer) => {
+export const createMoveForwardCommand: MoveForwardCommandFactory = (store) => (adventurer) => {
     const { mapSize, objects } = store.getState();
     const { id, orientation, name } = adventurer;
     let { location } = adventurer;
@@ -51,7 +51,7 @@ export const moveForwardCommand: MoveForwardCommandFactory = (store) => (adventu
         throw new Error(`Adventurer ${name} has an invalid location: (${location.x}, ${location.y}).`);
     }
 
-    if (getOccupant(objects, location)) {
+    if (isOccupied(objects, location)) {
         return; // Ignore the move command.
     }
 
@@ -63,7 +63,7 @@ export const moveForwardCommand: MoveForwardCommandFactory = (store) => (adventu
  * @param state the previous state.
  * @param command the rotate command.
  */
-export const rotateCommand: RotateCommandFactory = (store) => (adventurer, rotator) => {
+export const createRotateCommand: RotateCommandFactory = (store) => (adventurer, rotator) => {
     const { id, orientation } = adventurer;
     store.dispatch(setAdventurerOrientation(id, rotator(orientation)));
 };

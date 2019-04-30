@@ -1,10 +1,11 @@
 import * as fs from "fs";
 import * as yargs from "yargs";
-import { moveCommand, moveForwardCommand, rotateCommand } from "./commands";
+import { createMoveCommand, createMoveForwardCommand, createRotateCommand } from "./commands";
 import { parseStream } from "./parsers";
 import { getAdventurers, hasMovesFactory as hasMovesFactory } from "./stateQueries";
-import { mainReducer } from "./store/reducers";
+import { createMainReducer, createObjectsReducer } from "./store/reducers";
 import { Store } from "./store/store";
+import { updateAdventurer, updateTreasure } from "./store/updaters";
 
 const args = yargs.option("f", {
     alias: "filename",
@@ -19,8 +20,8 @@ if (!fs.existsSync(filename)) {
 }
 
 parseStream(fs.createReadStream(filename)).then((firstState) => {
-    const store = new Store(firstState, mainReducer);
-    const move = moveCommand(store, moveForwardCommand(store), rotateCommand(store));
+    const store = new Store(firstState, createMainReducer(createObjectsReducer(updateAdventurer, updateTreasure)));
+    const move = createMoveCommand(store, createMoveForwardCommand(store), createRotateCommand(store));
     const hasMoves = hasMovesFactory(store);
     while (hasMoves()) {
         for (const adventurer of getAdventurers(store.getState())) {

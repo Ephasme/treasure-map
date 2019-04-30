@@ -1,12 +1,9 @@
 import { Stack } from "immutable";
-import { AdventurerMove, IAdventurer, Id, ITreasure } from "../models";
+import { AdventurerMove, Id } from "../models";
 import { IDirection } from "../utils/directions";
 import { IVector } from "../utils/vector";
-import { ObjectsState } from "./state";
 
 export type Dispatch = (mutation: AnyMutation) => void;
-export type UpdateAdventurer = (objects: ObjectsState, id: Id, newAdventurer: Partial<IAdventurer>) => IAdventurer;
-export type UpdateTreasure = (objects: ObjectsState, id: Id, newTreasure: Partial<ITreasure>) => ITreasure;
 export type SetAdventurerLocation = (id: Id, location: IVector) => ISetAdventurerLocation;
 export type SetAdventurerOrientation = (id: Id, orientation: IDirection) => ISetAdventurerOrientation;
 export type SetAdventurerMoves = (id: Id, moves: Stack<AdventurerMove>) => ISetAdventurerMoves;
@@ -54,22 +51,6 @@ export type AnyMutation =
     | ISetAdventurerOrientation
     | IChangeTreasureQuantity
     ;
-
-export const updateTreasure: UpdateTreasure = (objects, id, treasure) => {
-    const adventurer = objects.get(id);
-    if (adventurer && adventurer.type === "Treasure") {
-        return Object.assign({}, adventurer, treasure);
-    }
-    throw new Error(`Object ${id} is not an adventurer.`);
-};
-
-export const updateAdventurer: UpdateAdventurer = (objects, id, newAdventurer) => {
-    const adventurer = objects.get(id);
-    if (adventurer && adventurer.type === "Adventurer") {
-        return Object.assign({}, adventurer, newAdventurer);
-    }
-    throw new Error(`Object ${id} is not an adventurer.`);
-};
 
 export const changeTreasureQuantity = (id: Id, quantity: number) => ({
     type: CHANGE_TREASURE_QUANTITY,
