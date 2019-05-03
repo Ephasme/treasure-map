@@ -1,20 +1,20 @@
-import { IAdventurer, WithId } from "./models";
-import { getTreasure, isOccupied } from "./stateQueries";
-import { IStore } from "./store/IStore";
-import { changeTreasureQuantity, setAdventurerLocation,
-    setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
+import { IAdventurer, ITreasure, WithId } from "./models";
+import { changeTreasureQuantity, Dispatch,
+    setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
 import { add, IVector } from "./utils/vector";
 
 export type MoveForwardCommand = (adventurer: WithId<IAdventurer>) => void;
 export type MoveForwardCommandFactory = (
         isLocationValid: (location: IVector) => boolean,
-        store: IStore) => MoveForwardCommand;
+        isOccupied: (location: IVector) => boolean,
+        getTreasure: (location: IVector) => WithId<ITreasure> | undefined,
+        dispatch: Dispatch) => MoveForwardCommand;
 
 export type RotateCommand = (adventurer: WithId<IAdventurer>, rotator: Rotate) => void;
-export type RotateCommandFactory = (store: IStore) => RotateCommand;
+export type RotateCommandFactory = (dispatch: Dispatch) => RotateCommand;
 export type MoveCommandFactory = (
-    store: IStore,
+    dispatch: Dispatch,
     moveForward: MoveForwardCommand,
     rotate: RotateCommand) =>
     (adventurer: WithId<IAdventurer>) => void;
@@ -23,7 +23,7 @@ export type MoveCommandFactory = (
  * Executes the next move of the given adventurer.
  * @param adventurerId the id of the adventurer.
  */
-export const createMoveCommand: MoveCommandFactory = (store, moveForward, rotate) => (adventurer) => {
+export const createMoveCommand: MoveCommandFactory = (dispatch, moveForward, rotate) => (adventurer) => {
     let { moves } = adventurer;
     const currentMove = moves.first(null);
 
@@ -34,7 +34,7 @@ export const createMoveCommand: MoveCommandFactory = (store, moveForward, rotate
             case "D": rotate(adventurer, right); break;
             case "G": rotate(adventurer, left); break;
         }
-        store.dispatch(setAdventurerMoves(adventurer.id, moves));
+        dispatch(setAdventurerMoves(adventurer.id, moves));
     }
 };
 
@@ -43,8 +43,8 @@ export const createMoveCommand: MoveCommandFactory = (store, moveForward, rotate
  * @param state previous state.
  * @param command the move command.
  */
-export const createMoveForwardCommand: MoveForwardCommandFactory = (isLocationValid, store) => (adventurer) => {
-    const { objects } = store.getState();
+export const createMoveForwardCommand: MoveForwardCommandFactory = (
+        isLocationValid, isOccupied, getTreasure, dispatch) => (adventurer) => {
     const { id, orientation, name } = adventurer;
     let { location } = adventurer;
 
@@ -54,16 +54,16 @@ export const createMoveForwardCommand: MoveForwardCommandFactory = (isLocationVa
         throw new Error(`Adventurer ${name} has an invalid location: (${location.x}, ${location.y}).`);
     }
 
-    if (isOccupied(objects, location)) {
+    if (isOccupied(location)) {
         return; // Ignore the move command.
     }
 
-    const treasure = getTreasure(objects, location);
+    const treasure = getTreasure(location);
     if (treasure) {
-        store.dispatch(changeTreasureQuantity(treasure.id, treasure.quantity - 1));
+        dispatch(changeTreasureQuantity(treasure.id, treasure.quantity - 1));
     }
 
-    store.dispatch(setAdventurerLocation(id, location));
+    dispatch(setAdventurerLocation(id, location));
 };
 
 /**
@@ -71,7 +71,7 @@ export const createMoveForwardCommand: MoveForwardCommandFactory = (isLocationVa
  * @param state the previous state.
  * @param command the rotate command.
  */
-export const createRotateCommand: RotateCommandFactory = (store) => (adventurer, rotator) => {
+export const createRotateCommand: RotateCommandFactory = (dispatch) => (adventurer, rotator) => {
     const { id, orientation } = adventurer;
-    store.dispatch(setAdventurerOrientation(id, rotator(orientation)));
+    dispatch(setAdventurerOrientation(id, rotator(orientation)));
 };

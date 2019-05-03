@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as yargs from "yargs";
 import { createMoveCommand, createMoveForwardCommand, createRotateCommand } from "./commands";
 import { parseStream } from "./parsers";
-import { getAdventurers, hasMovesFactory, isLocationValid } from "./stateQueries";
+import { getAdventurers, getTreasure, hasMovesFactory, isLocationValid, isOccupied } from "./stateQueries";
 import { createMainReducer, createObjectsReducer } from "./store/reducers";
 import { updateAdventurer, updateTreasure } from "./store/reducers";
 import { Store } from "./store/Store";
@@ -21,12 +21,17 @@ if (!fs.existsSync(filename)) {
 
 parseStream(fs.createReadStream(filename)).then((firstState) => {
     const store = new Store(firstState, createMainReducer(createObjectsReducer(updateAdventurer, updateTreasure)));
-    const move = createMoveCommand(store,
-        createMoveForwardCommand(isLocationValid(store.getState().mapSize), store),
-        createRotateCommand(store));
+    const move = createMoveCommand(store.dispatch,
+        createMoveForwardCommand(
+            isLocationValid(store.getState().mapSize),
+            isOccupied(store.getState().objects),
+            getTreasure(store.getState().objects),
+            store.dispatch),
+        createRotateCommand(store.dispatch));
     const hasMoves = hasMovesFactory(store);
+    const getAdventurersQuery = getAdventurers(store.getState());
     while (hasMoves()) {
-        for (const adventurer of getAdventurers(store.getState())) {
+        for (const adventurer of getAdventurersQuery()) {
             move(adventurer);
         }
     }

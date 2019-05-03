@@ -8,12 +8,12 @@ it("should return the current occupant", () => {
     const state: Map<number, IAdventurer> = Map([
         [1, buildAdventurer({ location: vector(5, 2) })],
     ]);
-    const result = isOccupied(state, vector(5, 2));
+    const result = isOccupied(state)(vector(5, 2));
     expect(result).toBeTruthy();
 });
 
 const shouldReturnUndefined: (map: Map<number, IAdventurer>) => () => void = (map) => () => {
-    const result = isOccupied(map, vector(3, 10));
+    const result = isOccupied(map)(vector(3, 10));
     expect(result).toBeFalsy();
 };
 

@@ -1,62 +1,61 @@
-import { Map } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
-import { mockStore } from "../../__fixtures__/mockStateManager";
+import { buildTreasure } from "../../__fixtures__/buildTreasure";
 import { createMoveForwardCommand } from "../../commands";
-import { IAdventurer, withId } from "../../models";
+import { withId } from "../../models";
 import { IChangeTreasureQuantity, ISetAdventurerLocation } from "../../store/mutations";
 import { North } from "../../utils/directions";
 import { vector } from "../../utils/vector";
 
 it("should dispatch the proper mutation", () => {
-    const { store, dispatch } = mockStore();
-    const adventurer = withId(1, store.getState().objects.get(1)! as IAdventurer);
+    const adventurer = withId(3, buildAdventurer());
+    const dispatch = jest.fn();
     const isLocationValid = () => true;
-    createMoveForwardCommand(isLocationValid, store)(adventurer);
+    const getTreasure = () => undefined;
+    const isOccupied = () => false;
+    createMoveForwardCommand(isLocationValid, isOccupied, getTreasure, dispatch)(adventurer);
     const expectedMutation: ISetAdventurerLocation = {
         type: "SET_ADVENTURER_LOCATION",
         payload: {
-            id: 1,
-            location: {x: 2, y: 2},
+            id: 3,
+            location: {x: 5, y: 3},
         },
     };
     expect(dispatch).toBeCalledWith(expectedMutation);
 });
 
 it("should dispatch change treasure quantity when location has a treasure", () => {
-    const { store, dispatch } = mockStore();
-    const adventurer = withId(2, store.getState().objects.get(2)! as IAdventurer);
+    const adventurer = withId(3, buildAdventurer());
+    const dispatch = jest.fn();
     const isLocationValid = () => true;
-    createMoveForwardCommand(isLocationValid, store)(adventurer);
+    const isOccupied = () => false;
+    const getTreasure = () => withId(6, buildTreasure());
+    createMoveForwardCommand(isLocationValid, isOccupied, getTreasure, dispatch)(adventurer);
     const expectedMutation: IChangeTreasureQuantity = {
         type: "CHANGE_TREASURE_QUANTITY",
         payload: {
-            id: 3,
-            quantity: 2,
+            id: 6,
+            quantity: 3,
         },
     };
     expect(dispatch).toHaveBeenCalledWith(expectedMutation);
 });
 
 it("should not move the adventurer if location is occupied", () => {
-    const adventurer = {id: 0, ...buildAdventurer({ location: vector(1, 2), orientation: North })};
+    const adventurer = withId(0, buildAdventurer({ location: vector(1, 2), orientation: North }));
+    const dispatch = jest.fn();
     const isLocationValid = () => true;
-    const { store, dispatch } = mockStore({
-        objects: Map([
-            [0, adventurer],
-            [1, buildAdventurer({ location: vector(1, 3), orientation: North })],
-        ]),
-    });
-    createMoveForwardCommand(isLocationValid, store)(adventurer);
+    const getTreasure = () => undefined;
+    const isOccupied = () => true;
+    createMoveForwardCommand(isLocationValid, isOccupied, getTreasure, dispatch)(adventurer);
     expect(dispatch).not.toBeCalled();
 });
 
 it("should throw if location is invalid", () => {
     const adventurer = buildAdventurer({ location: vector(3, 3), orientation: North });
+    const dispatch = jest.fn();
     const isLocationValid = () => false;
-    const { store } = mockStore({
-        objects: Map([
-            [0, adventurer],
-        ]),
-    });
-    expect(() => createMoveForwardCommand(isLocationValid, store)(withId(0, adventurer))).toThrow();
+    const getTreasure = () => undefined;
+    const isOccupied = () => false;
+    expect(() => createMoveForwardCommand(
+        isLocationValid, isOccupied, getTreasure, dispatch)(withId(0, adventurer))).toThrow();
 });

@@ -5,6 +5,6 @@ export const buildTreasure = (partialTreasure?: Partial<ITreasure>): ITreasure =
     type: "Treasure",
     location: vector(5, 2),
     traversable: true,
-    quantity: 2,
+    quantity: 4,
     ...partialTreasure,
 });

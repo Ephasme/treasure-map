@@ -1,6 +1,6 @@
-import { IAdventurer, Id, ITreasure, WithId, withId } from "./models";
+import { IAdventurer, ITreasure, WithId, withId } from "./models";
 import { IStore } from "./store/IStore";
-import { GameState, MapSizeState, ObjectsState } from "./store/state";
+import { GameState, ObjectsState } from "./store/state";
 import { equals, IVector } from "./utils/vector";
 
 /**
@@ -19,7 +19,7 @@ export const hasMovesFactory = (store: IStore) => (): boolean => {
  * @param objects the current state of the world
  * @param location the location to test
  */
-export const isOccupied = (objects: ObjectsState, location: IVector): boolean => {
+export const isOccupied = (objects: ObjectsState) => (location: IVector): boolean => {
     return !!objects
         .filter((x) => !x.traversable)
         .map((x) => x.location)
@@ -31,7 +31,7 @@ export const isOccupied = (objects: ObjectsState, location: IVector): boolean =>
  * @param objects the current game objets.
  * @param location the location of the treasure.
  */
-export const getTreasure = (objects: ObjectsState, location: IVector): WithId<ITreasure> | undefined => {
+export const getTreasure = (objects: ObjectsState) => (location: IVector): WithId<ITreasure> | undefined => {
     const id = objects.findKey((x) => equals(location, x.location));
     if (id) {
         const obj = objects.get(id);
@@ -51,28 +51,13 @@ export const isLocationValid = (boundaries: IVector) => (location: IVector) => {
            location.y >= 0 && location.y < boundaries.y;
 };
 
-/**
- * Find an adventurer in the list of objects.
- * @param objects the current list of objects.
- * @param id the adventurer's id.
- */
-export const findAdventurer = (objects: ObjectsState, id: Id): WithId<IAdventurer> => {
-    const adventurer = objects.get(id);
-    if (!adventurer || adventurer.type !== "Adventurer") {
-        throw new Error("Not found.");
-    }
-    return withId(id, adventurer);
-};
-
-/**
- * Iterate over all the adventurers in order.
- * @param state the game state.
- */
-export function *getAdventurers(state: GameState): IterableIterator<WithId<IAdventurer>> {
-    for (const id of state.adventurersOrder) {
-        const adventurer = state.objects.get(id);
-        if (adventurer && adventurer.type === "Adventurer") {
-            yield withId(id, adventurer);
+export const getAdventurers: (state: GameState) => () => IterableIterator<WithId<IAdventurer>> = (state) => {
+    return function*() {
+        for (const id of state.adventurersOrder) {
+            const adventurer = state.objects.get(id);
+            if (adventurer && adventurer.type === "Adventurer") {
+                yield withId(id, adventurer);
+            }
         }
-    }
-}
+    };
+};
