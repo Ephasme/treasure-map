@@ -1,7 +1,8 @@
 import { IAdventurer, WithId } from "./models";
-import { isLocationValid, isOccupied, isOccupied as getOccupant } from "./stateQueries";
+import { getTreasure, isLocationValid, isOccupied } from "./stateQueries";
 import { IStore } from "./store/IStore";
-import { setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
+import { changeTreasureQuantity, setAdventurerLocation,
+    setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
 import { add } from "./utils/vector";
 
@@ -53,6 +54,11 @@ export const createMoveForwardCommand: MoveForwardCommandFactory = (store) => (a
 
     if (isOccupied(objects, location)) {
         return; // Ignore the move command.
+    }
+
+    const treasure = getTreasure(objects, location);
+    if (treasure) {
+        store.dispatch(changeTreasureQuantity(treasure.id, treasure.quantity - 1));
     }
 
     store.dispatch(setAdventurerLocation(id, location));

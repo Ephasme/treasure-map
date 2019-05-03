@@ -3,22 +3,36 @@ import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { mockStore } from "../../__fixtures__/mockStateManager";
 import { createMoveForwardCommand } from "../../commands";
 import { IAdventurer, withId } from "../../models";
-import { ISetAdventurerLocation } from "../../store/mutations";
+import { IChangeTreasureQuantity, ISetAdventurerLocation } from "../../store/mutations";
 import { North } from "../../utils/directions";
 import { vector } from "../../utils/vector";
 
 it("should dispatch the proper mutation", () => {
     const { store, dispatch } = mockStore();
-    const adventurer = withId(2, store.getState().objects.get(2)! as IAdventurer);
+    const adventurer = withId(1, store.getState().objects.get(1)! as IAdventurer);
     createMoveForwardCommand(store)(adventurer);
     const expectedMutation: ISetAdventurerLocation = {
         type: "SET_ADVENTURER_LOCATION",
         payload: {
-            id: 2,
-            location: {x: 2, y: 1},
+            id: 1,
+            location: {x: 2, y: 2},
         },
     };
     expect(dispatch).toBeCalledWith(expectedMutation);
+});
+
+it("should dispatch change treasure quantity when location has a treasure", () => {
+    const { store, dispatch } = mockStore();
+    const adventurer = withId(2, store.getState().objects.get(2)! as IAdventurer);
+    createMoveForwardCommand(store)(adventurer);
+    const expectedMutation: IChangeTreasureQuantity = {
+        type: "CHANGE_TREASURE_QUANTITY",
+        payload: {
+            id: 3,
+            quantity: 2,
+        },
+    };
+    expect(dispatch).toHaveBeenCalledWith(expectedMutation);
 });
 
 it("should not move the adventurer if location is occupied", () => {

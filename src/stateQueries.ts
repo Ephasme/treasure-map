@@ -1,4 +1,4 @@
-import { IAdventurer, Id, WithId, withId } from "./models";
+import { IAdventurer, Id, ITreasure, WithId, withId } from "./models";
 import { IStore } from "./store/IStore";
 import { GameState, MapSizeState, ObjectsState } from "./store/state";
 import { equals, IVector } from "./utils/vector";
@@ -24,6 +24,21 @@ export const isOccupied = (objects: ObjectsState, location: IVector): boolean =>
         .filter((x) => !x.traversable)
         .map((x) => x.location)
         .findKey((vector) => equals(vector, location));
+};
+
+/**
+ * Returns the treasure if there is some, undefined otherwise.
+ * @param objects the current game objets.
+ * @param location the location of the treasure.
+ */
+export const getTreasure = (objects: ObjectsState, location: IVector): WithId<ITreasure> | undefined => {
+    const id = objects.findKey((x) => equals(location, x.location));
+    if (id) {
+        const obj = objects.get(id);
+        if (obj && obj.type === "Treasure") {
+            return withId(id, obj);
+        }
+    }
 };
 
 /**
