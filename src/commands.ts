@@ -1,13 +1,15 @@
 import { IAdventurer, WithId } from "./models";
-import { getTreasure, isLocationValid, isOccupied } from "./stateQueries";
+import { getTreasure, isOccupied } from "./stateQueries";
 import { IStore } from "./store/IStore";
 import { changeTreasureQuantity, setAdventurerLocation,
     setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
-import { add } from "./utils/vector";
+import { add, IVector } from "./utils/vector";
 
 export type MoveForwardCommand = (adventurer: WithId<IAdventurer>) => void;
-export type MoveForwardCommandFactory = (store: IStore) => MoveForwardCommand;
+export type MoveForwardCommandFactory = (
+        isLocationValid: (location: IVector) => boolean,
+        store: IStore) => MoveForwardCommand;
 
 export type RotateCommand = (adventurer: WithId<IAdventurer>, rotator: Rotate) => void;
 export type RotateCommandFactory = (store: IStore) => RotateCommand;
@@ -41,14 +43,14 @@ export const createMoveCommand: MoveCommandFactory = (store, moveForward, rotate
  * @param state previous state.
  * @param command the move command.
  */
-export const createMoveForwardCommand: MoveForwardCommandFactory = (store) => (adventurer) => {
-    const { mapSize, objects } = store.getState();
+export const createMoveForwardCommand: MoveForwardCommandFactory = (isLocationValid, store) => (adventurer) => {
+    const { objects } = store.getState();
     const { id, orientation, name } = adventurer;
     let { location } = adventurer;
 
     location = add(location, orientation);
 
-    if (!isLocationValid(mapSize, location)) {
+    if (!isLocationValid(location)) {
         throw new Error(`Adventurer ${name} has an invalid location: (${location.x}, ${location.y}).`);
     }
 

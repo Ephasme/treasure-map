@@ -43,12 +43,12 @@ export const getTreasure = (objects: ObjectsState, location: IVector): WithId<IT
 
 /**
  * Checks if the location is valid.
- * @param mapSize the map's dimensions.
+ * @param boundaries the map's dimensions.
  * @param location the location to test.
  */
-export const isLocationValid = (mapSize: MapSizeState, location: IVector): boolean => {
-    return location.x >= 0 && location.x < mapSize.x &&
-           location.y >= 0 && location.y < mapSize.y;
+export const isLocationValid = (boundaries: IVector) => (location: IVector) => {
+    return location.x >= 0 && location.x < boundaries.x &&
+           location.y >= 0 && location.y < boundaries.y;
 };
 
 /**

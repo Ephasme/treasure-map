@@ -10,7 +10,8 @@ import { vector } from "../../utils/vector";
 it("should dispatch the proper mutation", () => {
     const { store, dispatch } = mockStore();
     const adventurer = withId(1, store.getState().objects.get(1)! as IAdventurer);
-    createMoveForwardCommand(store)(adventurer);
+    const isLocationValid = () => true;
+    createMoveForwardCommand(isLocationValid, store)(adventurer);
     const expectedMutation: ISetAdventurerLocation = {
         type: "SET_ADVENTURER_LOCATION",
         payload: {
@@ -24,7 +25,8 @@ it("should dispatch the proper mutation", () => {
 it("should dispatch change treasure quantity when location has a treasure", () => {
     const { store, dispatch } = mockStore();
     const adventurer = withId(2, store.getState().objects.get(2)! as IAdventurer);
-    createMoveForwardCommand(store)(adventurer);
+    const isLocationValid = () => true;
+    createMoveForwardCommand(isLocationValid, store)(adventurer);
     const expectedMutation: IChangeTreasureQuantity = {
         type: "CHANGE_TREASURE_QUANTITY",
         payload: {
@@ -37,22 +39,24 @@ it("should dispatch change treasure quantity when location has a treasure", () =
 
 it("should not move the adventurer if location is occupied", () => {
     const adventurer = {id: 0, ...buildAdventurer({ location: vector(1, 2), orientation: North })};
+    const isLocationValid = () => true;
     const { store, dispatch } = mockStore({
         objects: Map([
             [0, adventurer],
             [1, buildAdventurer({ location: vector(1, 3), orientation: North })],
         ]),
     });
-    createMoveForwardCommand(store)(adventurer);
+    createMoveForwardCommand(isLocationValid, store)(adventurer);
     expect(dispatch).not.toBeCalled();
 });
 
 it("should throw if location is invalid", () => {
     const adventurer = buildAdventurer({ location: vector(3, 3), orientation: North });
+    const isLocationValid = () => false;
     const { store } = mockStore({
         objects: Map([
             [0, adventurer],
         ]),
     });
-    expect(() => createMoveForwardCommand(store)(withId(0, adventurer))).toThrow();
+    expect(() => createMoveForwardCommand(isLocationValid, store)(withId(0, adventurer))).toThrow();
 });
