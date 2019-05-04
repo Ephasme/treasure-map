@@ -1,20 +1,19 @@
 import { Map, Stack } from "immutable";
 import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
-import { buildGameState } from "../../__fixtures__/buildGameState";
-import { mockStore } from "../../__fixtures__/mockStateManager";
 import { AnyObject } from "../../models";
-import { hasMovesFactory } from "../../stateQueries";
+import { hasMoves } from "../../stateQueries";
+import { ObjectsState } from "../../store/state";
 
 it("should return true when some adventurer have some moves", () => {
-    const { store } = mockStore();
-    expect(hasMovesFactory(store)()).toBeTruthy();
+    const objects: ObjectsState = Map([
+        [0, buildAdventurer()],
+    ]);
+    expect(hasMoves(() => objects)()).toBeTruthy();
 });
 
 it("should return false when no adventurer have moves", () => {
-    const { store } = mockStore({
-        objects: Map<number, AnyObject>([
-            [0, buildAdventurer({ moves: Stack() })],
-        ]),
-    });
-    expect(hasMovesFactory(store)()).toBeFalsy();
+    const objects = Map<number, AnyObject>([
+        [0, buildAdventurer({ moves: Stack() })],
+    ]);
+    expect(hasMoves(() => objects)()).toBeFalsy();
 });
