@@ -4,10 +4,10 @@ import { equals, IVector } from "./utils/vector";
 
 /**
  * Returns true if some adventurers have some moves.
- * @param objects the state.
+ * @param getObjects the state.
  */
-export const hasMoves = (objects: () => ObjectsState) => (): boolean => {
-    return !!objects().find((x) => {
+export const hasMoves = (getObjects: () => ObjectsState) => (): boolean => {
+    return !!getObjects().find((x) => {
         return x.type === "Adventurer"
             && !x.moves.isEmpty();
     });
@@ -15,11 +15,11 @@ export const hasMoves = (objects: () => ObjectsState) => (): boolean => {
 
 /**
  * If this function whether the location is occupied or not.
- * @param objects the current state of the world
+ * @param getObjects the current state of the world
  * @param location the location to test
  */
-export const isOccupied = (objects: () => ObjectsState) => (location: IVector): boolean => {
-    return !!objects()
+export const isOccupied = (getObjects: () => ObjectsState) => (location: IVector): boolean => {
+    return !!getObjects()
         .filter((x) => !x.traversable)
         .map((x) => x.location)
         .findKey((vector) => equals(vector, location));
@@ -27,13 +27,14 @@ export const isOccupied = (objects: () => ObjectsState) => (location: IVector): 
 
 /**
  * Returns the treasure if there is some, undefined otherwise.
- * @param objects the current game objets.
+ * @param getObjects the current game objets.
  * @param location the location of the treasure.
  */
-export const getTreasure = (objects: () => ObjectsState) => (location: IVector): WithId<ITreasure> | undefined => {
-    const id = objects().findKey((x) => equals(location, x.location));
+export const getTreasure = (getObjects: () => ObjectsState) => (location: IVector): WithId<ITreasure> | undefined => {
+    const objects = getObjects();
+    const id = objects.findKey((x) => equals(location, x.location));
     if (id) {
-        const obj = objects().get(id);
+        const obj = objects.get(id);
         if (obj && obj.type === "Treasure") {
             return withId(id, obj);
         }
@@ -42,18 +43,20 @@ export const getTreasure = (objects: () => ObjectsState) => (location: IVector):
 
 /**
  * Checks if the location is valid.
- * @param boundaries the map's dimensions.
+ * @param getBoundaries the map's dimensions.
  * @param location the location to test.
  */
-export const isLocationValid = (boundaries: () => IVector) => (location: IVector) => {
-    return location.x >= 0 && location.x < boundaries().x &&
-           location.y >= 0 && location.y < boundaries().y;
+export const isLocationValid = (getBoundaries: () => IVector) => (location: IVector) => {
+    const { x: xmax, y: ymax } = getBoundaries();
+    return location.x >= 0 && location.x < xmax &&
+           location.y >= 0 && location.y < ymax;
 };
 
-export const getAdventurers: (state: () => GameState) => () => IterableIterator<WithId<IAdventurer>> = (state) => {
+export const getAdventurers: (getState: () => GameState) => () => IterableIterator<WithId<IAdventurer>> = (state) => {
     return function*() {
-        for (const id of state().adventurersOrder) {
-            const adventurer = state().objects.get(id);
+        const { adventurersOrder, objects } = state();
+        for (const id of adventurersOrder) {
+            const adventurer = objects.get(id);
             if (adventurer && adventurer.type === "Adventurer") {
                 yield withId(id, adventurer);
             }
