@@ -25,12 +25,12 @@ parseStream(fs.createReadStream(filename)).then((firstState) => {
     const move = createMoveCommand(store.dispatch,
         createMoveForwardCommand(
             isLocationValid(() => store.getState().mapSize),
-            isOccupied(() => store.getState().objects),
+            isOccupied(() => Array.from(store.getState().objects.values())),
             getTreasure(() => store.getState().objects),
             store.dispatch),
         createRotateCommand(store.dispatch));
-    const hasMovesQuery = hasMoves(() => store.getState().objects);
-    const getAdventurersQuery = getAdventurers(() => store.getState());
+    const hasMovesQuery = hasMoves(() => Array.from(store.getState().objects.values()));
+    const getAdventurersQuery = getAdventurers(() => store.getState().adventurersOrder, () => store.getState().objects);
 
     // Game Loop.
     while (hasMovesQuery()) {
