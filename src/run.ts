@@ -3,7 +3,11 @@ import { buildContainer } from "./buildContainer";
 import { parseStream } from "./parsers";
 import { GameState } from "./store/state";
 
-export const run = async (stream: Readable, onFinished: (game: GameState) => void) => {
+/**
+ * Runs the game and returns the end state.
+ * @param stream a stream containing the description of the game data.
+ */
+export const run = async (stream: Readable): Promise<GameState> => {
     const firstState = await parseStream(stream);
     const { hasMovesQuery, getAdventurersQuery, move, store } = buildContainer(firstState);
     // Game Loop.
@@ -12,5 +16,5 @@ export const run = async (stream: Readable, onFinished: (game: GameState) => voi
             move(adventurer);
         }
     }
-    onFinished(store.getState());
+    return store.getState();
 };
