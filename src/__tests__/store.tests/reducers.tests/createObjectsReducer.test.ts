@@ -1,22 +1,22 @@
 import { buildGameState } from "../../../__fixtures__/buildGameState";
 import { AnyMutation, setAdventurerLocation,
-    setAdventurerOrientation, treasureFound } from "../../../store/mutations";
+    setAdventurerOrientation } from "../../../store/mutations";
 import { createObjectsReducer } from "../../../store/reducers";
 import { North } from "../../../utils/directions";
 
 it("should create a reducer", () => {
     const updateAdv = jest.fn();
     const updateTre = jest.fn();
-    const reducer = createObjectsReducer(updateAdv, updateTre);
+    const reducer = createObjectsReducer(updateAdv);
     expect(reducer).not.toBeNull();
 });
 
 function buildContext() {
     const updateAdv = jest.fn();
     const updateTre = jest.fn();
-    const reducer = createObjectsReducer(updateAdv, updateTre);
+    const reducer = createObjectsReducer(updateAdv);
     const state = buildGameState();
-    return { reducer, state, location, updateAdv, updateTre };
+    return { reducer, state, location, updateAdv };
 }
 
 it("should call update adventurer when action is changing location", () => {
@@ -45,11 +45,4 @@ it("should not call update adventurer if mutation is not known", () => {
     const action = { type: "SOME_MUTATION", payload: { } };
     reducer(state.objects, action as AnyMutation);
     expect(updateAdv).not.toBeCalled();
-});
-
-it("should not call update treasure if mutation is not known", () => {
-    const { reducer, state, updateTre } = buildContext();
-    const action = { type: "SOME_MUTATION", payload: { } };
-    reducer(state.objects, action as AnyMutation);
-    expect(updateTre).not.toBeCalled();
 });

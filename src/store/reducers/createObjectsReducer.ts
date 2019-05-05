@@ -3,14 +3,13 @@ import { AnyMutation, SET_ADVENTURER_LOCATION,
     SET_ADVENTURER_MOVES, SET_ADVENTURER_ORIENTATION, TREASURE_FOUND } from "../mutations";
 import { ObjectsState } from "../state";
 import { UpdateAdventurer } from "./updateAdventurer";
-import { UpdateTreasure } from "./updateTreasure";
 
 export type ObjectsReducerFactory =
-    (updateAdventurer: UpdateAdventurer, updateTreasure: UpdateTreasure) => ObjectsReducer;
+    (updateAdventurer: UpdateAdventurer) => ObjectsReducer;
 export type ObjectsReducer = (objects: ObjectsState, mutation: AnyMutation) => ObjectsState;
 
 export const createObjectsReducer: ObjectsReducerFactory =
-    (updateAdventurer, updateTreasure) => (objects, mutation) => {
+    (updateAdventurer) => (objects, mutation) => {
     switch (mutation.type) {
         case SET_ADVENTURER_LOCATION: {
             const { id, location } = mutation.payload;
