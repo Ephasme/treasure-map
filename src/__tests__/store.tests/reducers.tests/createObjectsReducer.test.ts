@@ -1,5 +1,5 @@
 import { buildGameState } from "../../../__fixtures__/buildGameState";
-import { AnyMutation, changeTreasureQuantity,
+import { AnyMutation, treasureFound,
     setAdventurerLocation, setAdventurerOrientation } from "../../../store/mutations";
 import { createObjectsReducer } from "../../../store/reducers";
 import { North } from "../../../utils/directions";
@@ -31,13 +31,6 @@ it("should call update adventurer when action is changing direction", () => {
     const action = setAdventurerOrientation(8, North);
     reducer(state.objects, action);
     expect(updateAdv).toHaveBeenCalledWith(state.objects, 8, { orientation: North});
-});
-
-it("should call update treasure when action is changing treasure", () => {
-    const { reducer, state, updateTre } = buildContext();
-    const mutation = changeTreasureQuantity(5, 2);
-    reducer(state.objects, mutation);
-    expect(updateTre).toBeCalledWith(state.objects, 5, { quantity: 2 });
 });
 
 it("should return the state if mutation is not known", () => {

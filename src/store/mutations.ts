@@ -7,18 +7,27 @@ export type Dispatch = (mutation: AnyMutation) => void;
 export type SetAdventurerLocation = (id: Id, location: IVector) => ISetAdventurerLocation;
 export type SetAdventurerOrientation = (id: Id, orientation: IDirection) => ISetAdventurerOrientation;
 export type SetAdventurerMoves = (id: Id, moves: Stack<AdventurerMove>) => ISetAdventurerMoves;
-export type ChangeTreasureQuantity = (id: Id, quantity: number) => IChangeTreasureQuantity;
+export type AdventurerFoundTreasure = (adventurerId: Id) => IAdventurerFoundTreasure;
+export type TreasureFound = (id: Id) => ITreasureFound;
 
 export const SET_ADVENTURER_LOCATION = "SET_ADVENTURER_LOCATION";
 export const SET_ADVENTURER_ORIENTATION = "SET_ADVENTURER_ORIENTATION";
 export const SET_ADVENTURER_MOVES = "SET_ADVENTURER_MOVES";
-export const CHANGE_TREASURE_QUANTITY = "CHANGE_TREASURE_QUANTITY";
+export const ADVENTURER_FOUND_TREASURE = "ADVENTURER_FOUND_TREASURE";
+export const TREASURE_FOUND = "TREASURE_FOUND";
 
 export interface ISetAdventurerOrientation {
     type: typeof SET_ADVENTURER_ORIENTATION;
     payload: {
         id: Id;
         orientation: IDirection;
+    };
+}
+
+export interface IAdventurerFoundTreasure {
+    type: typeof ADVENTURER_FOUND_TREASURE;
+    payload: {
+        adventurerId: Id,
     };
 }
 
@@ -38,11 +47,10 @@ export interface ISetAdventurerMoves {
     };
 }
 
-export interface IChangeTreasureQuantity {
-    type: typeof CHANGE_TREASURE_QUANTITY;
+export interface ITreasureFound {
+    type: typeof TREASURE_FOUND;
     payload: {
         id: Id;
-        quantity: number;
     };
 }
 
@@ -50,12 +58,18 @@ export type AnyMutation =
     | ISetAdventurerMoves
     | ISetAdventurerLocation
     | ISetAdventurerOrientation
-    | IChangeTreasureQuantity
+    | ITreasureFound
+    | IAdventurerFoundTreasure
     ;
 
-export const changeTreasureQuantity: ChangeTreasureQuantity = (id: Id, quantity: number) => ({
-    type: CHANGE_TREASURE_QUANTITY,
-    payload: { id, quantity },
+export const adventurerFoundTreasure: AdventurerFoundTreasure = (adventurerId: Id) => ({
+    type: ADVENTURER_FOUND_TREASURE,
+    payload: { adventurerId },
+});
+
+export const treasureFound: TreasureFound = (id: Id) => ({
+    type: TREASURE_FOUND,
+    payload: { id },
 });
 
 export const setAdventurerMoves: SetAdventurerMoves = (id, moves) => ({

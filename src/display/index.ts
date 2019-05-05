@@ -1,12 +1,13 @@
 import { GameState } from "../store/state";
+import { IVector } from "../utils/vector";
+
+function renderMapSize(vector: IVector): string {
+    return `C - ${vector.x} - ${vector.y}`;
+}
 
 export function render(state: GameState): string {
-    const { x: xmax, y: ymax } = state.mapSize;
-    for (let i = 0; i < xmax; i++) {
-        for (let j = 0; j < ymax; j++) {
-            console.log(".        ");
-        }
-        console.log("\n");
-    }
-    return "";
+    let result = "";
+    result += renderMapSize(state.mapSize) + "\n";
+
+    return result;
 }

@@ -2,7 +2,7 @@ import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { buildTreasure } from "../../__fixtures__/buildTreasure";
 import { createMoveForwardCommand } from "../../commands";
 import { withId } from "../../models";
-import { IChangeTreasureQuantity, ISetAdventurerLocation } from "../../store/mutations";
+import { ITreasureFound, ISetAdventurerLocation, TREASURE_FOUND } from "../../store/mutations";
 import { North } from "../../utils/directions";
 import { vector } from "../../utils/vector";
 
@@ -30,11 +30,10 @@ it("should dispatch change treasure quantity when location has a treasure", () =
     const isOccupied = () => false;
     const getTreasure = () => withId(6, buildTreasure());
     createMoveForwardCommand(isLocationValid, isOccupied, getTreasure, dispatch)(adventurer);
-    const expectedMutation: IChangeTreasureQuantity = {
-        type: "CHANGE_TREASURE_QUANTITY",
+    const expectedMutation: ITreasureFound = {
+        type: TREASURE_FOUND,
         payload: {
             id: 6,
-            quantity: 3,
         },
     };
     expect(dispatch).toHaveBeenCalledWith(expectedMutation);

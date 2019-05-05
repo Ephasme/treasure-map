@@ -1,8 +1,9 @@
-import { AnyMutation, CHANGE_TREASURE_QUANTITY,
+import { AnyMutation, TREASURE_FOUND,
     SET_ADVENTURER_LOCATION, SET_ADVENTURER_MOVES, SET_ADVENTURER_ORIENTATION } from "../mutations";
 import { ObjectsState } from "../state";
 import { UpdateAdventurer } from "./updateAdventurer";
 import { UpdateTreasure } from "./updateTreasure";
+import { ITreasure } from "../../models";
 
 export type ObjectsReducerFactory =
     (updateAdventurer: UpdateAdventurer, updateTreasure: UpdateTreasure) => ObjectsReducer;
@@ -19,9 +20,14 @@ export const createObjectsReducer: ObjectsReducerFactory =
             const { id, orientation } = mutation.payload;
             return objects.set(id, updateAdventurer(objects, id, { orientation }));
         }
-        case CHANGE_TREASURE_QUANTITY: {
-            const { id, quantity } = mutation.payload;
-            return objects.set(id, updateTreasure(objects, id, { quantity }));
+        case TREASURE_FOUND: {
+            const { id } = mutation.payload;
+            const treasure = objects.get(id);
+            if (treasure && treasure.type === "Treasure") {
+                const newTreasure: ITreasure = { ...treasure, quantity: treasure.quantity - 1 };
+                return objects.set(id, newTreasure);
+            }
+            throw new Error(`Object ${id} is not a treasure.`);
         }
         case SET_ADVENTURER_MOVES: {
             const { id, moves } = mutation.payload;
