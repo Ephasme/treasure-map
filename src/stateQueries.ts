@@ -1,4 +1,5 @@
 import { Map } from "immutable";
+import { isNumber } from "util";
 import { AnyObject, IAdventurer, ITreasure, WithId, withId } from "./models";
 import { equals, IVector } from "./utils/vector";
 
@@ -34,7 +35,7 @@ export const getTreasure =
         (getObjects: () => Map<number, AnyObject>) => (location: IVector): WithId<ITreasure> | undefined => {
     const objects = getObjects();
     const id = objects.findKey((x) => equals(location, x.location));
-    if (id) {
+    if (isNumber(id)) {
         const obj = objects.get(id);
         if (obj && obj.type === "Treasure") {
             return withId(id, obj);
