@@ -53,6 +53,11 @@ export const isLocationValid = (getBoundaries: () => IVector) => (location: IVec
            location.y >= 0 && location.y < ymax;
 };
 
+/**
+ * Iterates over all the players in order.
+ * @param getAdventurersOrder the list of id representing the order of players.
+ * @param getObjects all the game objects.
+ */
 export const getAdventurers:
     (getAdventurersOrder: () => readonly number[], getObjects: () => Map<number, AnyObject>)
         => () => IterableIterator<WithId<IAdventurer>> = (getAdventurersOrder, getObjects) => {
