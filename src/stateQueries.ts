@@ -52,9 +52,12 @@ export const isLocationValid = (getBoundaries: () => IVector) => (location: IVec
            location.y >= 0 && location.y < ymax;
 };
 
-export const getAdventurers: (getState: () => GameState) => () => IterableIterator<WithId<IAdventurer>> = (state) => {
+export const getAdventurers:
+    (getAdventurersOrder: () => readonly number[], getObjects: () => ObjectsState)
+        => () => IterableIterator<WithId<IAdventurer>> = (getAdventurersOrder, getObjects) => {
     return function*() {
-        const { adventurersOrder, objects } = state();
+        const adventurersOrder = getAdventurersOrder();
+        const objects = getObjects();
         for (const id of adventurersOrder) {
             const adventurer = objects.get(id);
             if (adventurer && adventurer.type === "Adventurer") {
