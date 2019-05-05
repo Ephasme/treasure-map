@@ -1,6 +1,6 @@
 import { IAdventurer, ITreasure, WithId } from "./models";
-import { treasureFound, Dispatch,
-    setAdventurerLocation, setAdventurerMoves, setAdventurerOrientation } from "./store/mutations";
+import { Dispatch, setAdventurerLocation,
+    setAdventurerMoves, setAdventurerOrientation, treasureFound } from "./store/mutations";
 import { Rotate, rotateLeft as left, rotateRight as right } from "./utils/rotations";
 import { add, IVector } from "./utils/vector";
 
@@ -60,7 +60,7 @@ export const createMoveForwardCommand: MoveForwardCommandFactory = (
 
     const treasure = getTreasure(location);
     if (treasure) {
-        dispatch(treasureFound(treasure.id, treasure.quantity - 1));
+        dispatch(treasureFound(treasure.id));
     }
 
     dispatch(setAdventurerLocation(id, location));

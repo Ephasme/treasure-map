@@ -1,9 +1,9 @@
-import { AnyMutation, TREASURE_FOUND,
-    SET_ADVENTURER_LOCATION, SET_ADVENTURER_MOVES, SET_ADVENTURER_ORIENTATION } from "../mutations";
+import { ITreasure } from "../../models";
+import { AnyMutation, SET_ADVENTURER_LOCATION,
+    SET_ADVENTURER_MOVES, SET_ADVENTURER_ORIENTATION, TREASURE_FOUND } from "../mutations";
 import { ObjectsState } from "../state";
 import { UpdateAdventurer } from "./updateAdventurer";
 import { UpdateTreasure } from "./updateTreasure";
-import { ITreasure } from "../../models";
 
 export type ObjectsReducerFactory =
     (updateAdventurer: UpdateAdventurer, updateTreasure: UpdateTreasure) => ObjectsReducer;

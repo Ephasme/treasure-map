@@ -2,7 +2,7 @@ import { buildAdventurer } from "../../__fixtures__/buildAdventurer";
 import { buildTreasure } from "../../__fixtures__/buildTreasure";
 import { createMoveForwardCommand } from "../../commands";
 import { withId } from "../../models";
-import { ITreasureFound, ISetAdventurerLocation, TREASURE_FOUND } from "../../store/mutations";
+import { ISetAdventurerLocation, ITreasureFound, TREASURE_FOUND } from "../../store/mutations";
 import { North } from "../../utils/directions";
 import { vector } from "../../utils/vector";
 

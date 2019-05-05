@@ -1,6 +1,6 @@
 import { buildGameState } from "../../../__fixtures__/buildGameState";
-import { AnyMutation, treasureFound,
-    setAdventurerLocation, setAdventurerOrientation } from "../../../store/mutations";
+import { AnyMutation, setAdventurerLocation,
+    setAdventurerOrientation, treasureFound } from "../../../store/mutations";
 import { createObjectsReducer } from "../../../store/reducers";
 import { North } from "../../../utils/directions";
 
