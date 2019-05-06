@@ -25,6 +25,7 @@ A - Loup - 0 - 0 - N - AAAGADA`;
     const state = await parseStream(stream);
     const adventurer: IAdventurer = {
         type: "Adventurer",
+        treasures: 0,
         location: {x: 0, y: 0},
         moves: Stack(["A", "A", "A", "G", "A", "D", "A"]),
         name: "Loup",

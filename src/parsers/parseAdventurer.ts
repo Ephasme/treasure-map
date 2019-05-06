@@ -10,6 +10,7 @@ export const parseAdventurer: (input: string) => IAdventurer | null = (input) =>
         return {
             type: "Adventurer",
             traversable: false,
+            treasures: 0,
             name: regResult[1],
             location: {x: parseInt(regResult[2]), y: parseInt(regResult[3])},
             orientation: parseOrientation(regResult[4]),

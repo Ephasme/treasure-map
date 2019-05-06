@@ -9,6 +9,7 @@ export const buildAdventurer = (partialAdventurer?: Partial<IAdventurer>): IAdve
     traversable: false,
     moves: Stack(["G", "D", "A", "A", "A", "G", "G"]),
     orientation: North,
+    treasures: 4,
     name: "name",
     ...partialAdventurer,
 });

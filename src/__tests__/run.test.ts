@@ -25,6 +25,16 @@ A - Loup - 3 - 2 - N - A`;
     expect(tre.quantity).toEqual(0);
 });
 
+it("should take a treasure", async () => {
+    const game = `C - 4 - 4
+T - 3 - 3 - 1
+A - Loup - 3 - 2 - N - A`;
+
+    const endState = await run(toStream(game));
+    const adv = endState.objects.get(1) as IAdventurer;
+    expect(adv.treasures).toEqual(1);
+});
+
 it("should not move in front of a mountain", async () => {
     const game = `C - 4 - 4
 M - 0 - 1

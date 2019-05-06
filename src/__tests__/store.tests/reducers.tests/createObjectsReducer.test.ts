@@ -6,14 +6,12 @@ import { North } from "../../../utils/directions";
 
 it("should create a reducer", () => {
     const updateAdv = jest.fn();
-    const updateTre = jest.fn();
     const reducer = createObjectsReducer(updateAdv);
     expect(reducer).not.toBeNull();
 });
 
 function buildContext() {
     const updateAdv = jest.fn();
-    const updateTre = jest.fn();
     const reducer = createObjectsReducer(updateAdv);
     const state = buildGameState();
     return { reducer, state, location, updateAdv };

@@ -17,6 +17,7 @@ export type AdventurerMove = "A" | "D" | "G";
 export interface IAdventurer extends IGameObject {
     readonly type: "Adventurer";
     readonly orientation: IDirection;
+    readonly treasures: number;
     readonly moves: Stack<AdventurerMove>;
     readonly name: string;
 }

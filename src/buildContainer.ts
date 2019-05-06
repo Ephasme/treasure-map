@@ -1,12 +1,12 @@
 import { createMoveCommand, createMoveForwardCommand, createRotateCommand } from "./commands";
 import { getAdventurers, getTreasure, hasMoves, isLocationValid, isOccupied } from "./stateQueries";
-import { createMainReducer, createObjectsReducer, updateAdventurer, updateTreasure } from "./store/reducers";
+import { createMainReducer, createObjectsReducer, updateAdventurer  } from "./store/reducers";
 import { GameState } from "./store/state";
 import { Store } from "./store/Store";
 
 export const buildContainer = (firstState: GameState) => {
     // Poor man DI.
-    const store = new Store(firstState, createMainReducer(createObjectsReducer(updateAdventurer, updateTreasure)));
+    const store = new Store(firstState, createMainReducer(createObjectsReducer(updateAdventurer)));
     const dispatch = store.dispatch.bind(store);
     const move = createMoveCommand(dispatch,
         createMoveForwardCommand(
