@@ -1,8 +1,10 @@
 import { buildGameState } from "../../../__fixtures__/buildGameState";
 import { AnyMutation, setAdventurerLocation,
-    setAdventurerOrientation } from "../../../store/mutations";
+    setAdventurerOrientation, 
+    adventurerFoundTreasure} from "../../../store/mutations";
 import { createObjectsReducer } from "../../../store/reducers";
 import { North } from "../../../utils/directions";
+import { IAdventurer } from "../../../models";
 
 it("should create a reducer", () => {
     const updateAdv = jest.fn();
@@ -29,6 +31,13 @@ it("should call update adventurer when action is changing direction", () => {
     const action = setAdventurerOrientation(8, North);
     reducer(state.objects, action);
     expect(updateAdv).toHaveBeenCalledWith(state.objects, 8, { orientation: North});
+});
+
+it("should increase the number of treasures if adventurer found treasure", () => {
+    const { reducer, state } = buildContext();
+    const action = adventurerFoundTreasure(4);
+    const newState = reducer(state.objects, action);
+    expect((newState.get(4) as IAdventurer).treasures).toBe(5);
 });
 
 it("should return the state if mutation is not known", () => {
