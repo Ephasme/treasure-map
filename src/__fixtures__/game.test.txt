@@ -1,5 +1,7 @@
-C - 4 - 4
+C - 5 - 5
 M - 0 - 1
 M - 1 - 1
 T - 1 - 3 - 2
-A - Loup - 0 - 0 - N - AAGADAA
+A - Pierre - 4 - 2 - O - A
+A - Jim - 2 - 2 - E - A
+A - Loup - 1 - 2 - N - AGADDADAA

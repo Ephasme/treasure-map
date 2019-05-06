@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as yargs from "yargs";
-import { run } from "./run";
 import { render } from "./display";
+import { run } from "./run";
 
 const args = yargs.option("f", {
     alias: "filename",
@@ -17,4 +17,5 @@ if (!fs.existsSync(filename)) {
 
 run(fs.createReadStream(filename))
     .then(render)
+    .then(console.log)
     .catch(console.error);
