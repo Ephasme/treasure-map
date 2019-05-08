@@ -10,7 +10,7 @@
     "lint:fix": "tslint --project tsconfig.json --fix",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
-    "start:debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename ./src/__fixtures__/game.test.txt",
+    "start:debug": "node --inspect=5858 -r ts-node/register ./src/index.ts --filename ./src/__fixtures__/game.test.txt --output ./game.result.txt",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "dependencies": {

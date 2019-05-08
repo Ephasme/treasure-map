@@ -1,3 +1,4 @@
+# Some game test
 C - 5 - 5
 M - 0 - 1
 M - 1 - 1

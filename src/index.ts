@@ -3,13 +3,19 @@ import * as yargs from "yargs";
 import { render } from "./display";
 import { run } from "./run";
 
-const args = yargs.option("f", {
-    alias: "filename",
-    type: "string",
-    demand: "filename is required",
-}).argv;
+const args = yargs
+    .option("filename", {
+        alias: "f",
+        type: "string",
+        demand: "filename is required",
+    })
+    .option("output", {
+        alias: "o",
+        type: "string",
+    })
+    .argv;
 
-const filename = args.f;
+const filename = args.filename;
 
 if (!fs.existsSync(filename)) {
     throw new Error(`File ${filename} does not exist.`);
@@ -17,5 +23,11 @@ if (!fs.existsSync(filename)) {
 
 run(fs.createReadStream(filename))
     .then(render)
-    .then(console.log)
+    .then((data) => {
+        if (args.output) {
+            fs.writeFileSync(args.output, data);
+        } else {
+            console.log(data);
+        }
+    })
     .catch(console.error);
