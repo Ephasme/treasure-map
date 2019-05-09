@@ -12,9 +12,9 @@ You have the `--filename` option in order to choose your input as well as the `-
 
 I adopted TypeScript with a very functional approach. For the DI I opted for a pure DI and curry functions factories. I also chose to use immutability in order to have a very easy to reason architecture. Everything in the app state is readonly, each state is computed with reducers (redux style) and mutations are triggered via dispatch function and orchestrated with commands.
 
-The high order functions are designed with CQRS in mind: commands can dispatch mutations and queries are state agnostic.
+The higher order functions are designed with CQRS in mind: commands can dispatch mutations and queries are state agnostic.
 
-All of this makes my code very testable and very easy to maintain. Adding behaviour can be achieved without altering what already exists and side effects aren't very likely to happen. It also diminish the probability of regressions.
+All of this makes my code very testable and very easy to maintain. Adding behaviour can be achieved without altering what already exists and side effects aren't very likely to happen. It also diminishes the likelyhood of regressions.
 
 I have 78 unit tests and a snapshot test which ensure that the result is correct.
 I have 3 integration tests with the `run.test.ts` file.
