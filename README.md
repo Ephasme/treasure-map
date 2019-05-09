@@ -29,4 +29,4 @@ I think there are some optimisations to do by merging the TREASURE_FOUND and ADV
 
 I was happy to do this test. I hope it will please you and comfort your idea that I'm worthy of you interest.
 
-Please don't hesitate to give me feedback I will listen it carefully.
+Please don't hesitate to give me feedback I will listen to it carefully.
